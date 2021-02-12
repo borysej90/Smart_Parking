@@ -19,14 +19,14 @@ class ParkingModel(db.Model):
 
 # Initialize DB
 # NOTE: Run only once so you won't initialize DB every time you run script!!!!!!!!!!!!!!!
-#db.create_all()
+# db.create_all()
 
-#Arg parser for PUT
+# Arg parser for PUT
 parking_put_args = reqparse.RequestParser()
 parking_put_args.add_argument("total_lots", type=int, help="Total number of lots in parking space", required = True)
 parking_put_args.add_argument("free_lots", type=int, help="Number of available lots in parking space", required = True)
 
-#Arg parser for UPDATE(patch)
+# Arg parser for UPDATE(patch)
 parking_update_args = reqparse.RequestParser()
 parking_update_args.add_argument("total_lots", type=int, help="Total number of lots in parking space")
 parking_update_args.add_argument("free_lots", type=int, help="Number of available lots in parking space")
@@ -57,10 +57,10 @@ class Parking(Resource):
     @marshal_with(resource_filed)
     def get(self,parking_id):
 
-        #Find specified parking
+        # Find specified parking
         result = ParkingModel.query.filter_by(id=parking_id).first()
 
-        #Check if parking with specified id exists
+        # Check if parking with specified id exists
         if not result:
             abort(404, message="Could not find parking space with this id")
 
@@ -69,24 +69,24 @@ class Parking(Resource):
     @marshal_with(resource_filed)
     def put(self,parking_id):
 
-        #Read args
+        # Read args
         args = parking_put_args.parse_args()
 
-        #Check if there are no parkings with such id
+        # Check if there are no parkings with such id
         if ParkingModel.query.filter_by(id=parking_id).first():
             abort(409, message = 'Parking id already exists')
 
-        #Create new parking instance
+        # Create new parking instance
         parking = ParkingModel(id=parking_id, total_lots=args['total_lots'], free_lots=args['free_lots'])
 
-        #Add new instance to DB
+        # Add new instance to DB
         db.session.add(parking)
         db.session.commit()
 
-        #Return instance and 201 code
+        # Return instance and 201 code
         return parking,201
 
-    #NOT WORKING IN THIS ISSUE
+    # NOT WORKING IN THIS ISSUE
     @marshal_with(resource_filed)
     def patch(self, parking_id):
 
@@ -106,7 +106,7 @@ class Parking(Resource):
 
         return result
 
-    #WILL ADD LATER
+    # WILL ADD LATER
     def delete(self, parking_id):
         pass
 
