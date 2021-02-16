@@ -68,17 +68,14 @@ api.add_resource(ParkingSlot, "/parking/<int:parking_id>/slot/<int:parking_slot>
 
 class Parking(Resource):
     """
-
     BASIC GET REQUEST :
         BASE = 'http://127.0.0.1:5000/'
         response = requests.get(BASE + "parking/1")
         print(response.json())
-
     BASIC PUT REQUSET :
         BASE = 'http://127.0.0.1:5000/'
         response = request.put(BASE + parking/1,{"total_lots":10,"free_lots":4})
         print(response.json())
-
     BASIC UPDATE AND DELETE WILL BE ADDED LATER
     """
     @marshal_with(resource_filed)
@@ -94,7 +91,7 @@ class Parking(Resource):
         return result
 
     @marshal_with(resource_filed)
-    def put(self,parking_id):
+    def post(self,parking_id):
 
         # Read args
         args = parking_put_args.parse_args()
@@ -111,7 +108,7 @@ class Parking(Resource):
         db.session.commit()
 
         # Return instance and 201 code
-        return parking,201
+        return parking, 200
 
     # NOT WORKING IN THIS ISSUE
     @marshal_with(resource_filed)
