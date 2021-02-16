@@ -107,7 +107,7 @@ class Parking(Resource):
         db.session.add(parking)
         db.session.commit()
 
-        # Return instance and 201 code
+        # Return instance and 200 code
         return parking, 200
 
     # NOT WORKING IN THIS ISSUE
