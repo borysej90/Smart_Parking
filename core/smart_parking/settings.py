@@ -17,6 +17,7 @@ from environs import Env
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = Env()
+env.read_env()
 
 
 # Quick-start development settings - unsuitable for production
