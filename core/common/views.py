@@ -1,55 +1,68 @@
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework import status
+
+from django.shortcuts import get_object_or_404
 
 from .serializers import ParkingLotSerializer
 from .models import ParkingLot
 
 
-@api_view(['GET', 'POST'])
-def process_parking_lots(request):
-    if request.method == 'GET':
-        lots = ParkingLot.objects.all()
+class ParkingList(APIView):
+
+    def get(self, request, site_id, format=None):
+        lots = ParkingLot.objects.filter(parking_site=site_id)
         serializer = ParkingLotSerializer(lots, many=True)
         return Response(serializer.data)
 
-    if request.method == 'POST':
+    def post(self, request, site_id, format=None):
         serializer = ParkingLotSerializer(data=request.data)
-
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
-def process_parking_lot(request, pk):
-    try:
-        lot = ParkingLot.objects.get(id=pk)
-    except ParkingLot.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+class ParkingDetail(APIView):
 
-    if request.method == 'GET':
+    def get(self, request, site_id, pk, format=None):
+        lot = get_object_or_404(ParkingLot, pk=pk)
+
+        if lot.parking_site.id != site_id:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
         serializer = ParkingLotSerializer(lot)
         return Response(serializer.data)
 
-    if request.method == 'PUT':
+    def put(self, request, site_id, pk, format=None):
+        lot = get_object_or_404(ParkingLot, pk=pk)
+
+        if lot.parking_site.id != site_id:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         serializer = ParkingLotSerializer(lot, data=request.data)
-
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    if request.method == 'PATCH':
+    def patch(self, request, site_id, pk, format=None):
+        lot = get_object_or_404(ParkingLot, pk=pk)
+
+        if lot.parking_site.id != site_id:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         serializer = ParkingLotSerializer(lot, data=request.data, partial=True)
-
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    if request.method == 'DELETE':
+    def delete(self, request, site_id, pk, format=None):
+        lot = get_object_or_404(ParkingLot, pk=pk)
+
+        if lot.parking_site.id != site_id:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         lot.delete()
-
-        return Response("Parking lot has been deleted!", status=status.HTTP_200_OK)
+        return Response("Parking lot has been deleted!")
