@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Board</title>
+    <link rel="stylesheet" href="board.css">
+</head>
+<body>
+    <div class="slideshow-container cont">
+            <img class="img_parking" src="img/parking.png">
+            <div class="parking_zone">
+                <div class="slot" id="1" onClick="changeColor(this.id)">
+                    <img class="img_logo" src="img/logo_icon.png"></div>
+                <div class="slot" id="2" onClick="changeColor(this.id)">
+                    <img class="img_logo" src="img/logo_icon.png"></div>
+                <div class="slot" id="3" onClick="changeColor(this.id)">
+                    <img class="img_logo" src="img/logo_icon.png"></div>
+            </div>
+            <div class="parking_zone1">
+                <div class="slot" id="4" onClick="changeColor(this.id)">
+                    <img class="img_logo" src="img/logo_icon.png"></div>
+                <div class="slot" id="5" onClick="changeColor(this.id)">
+                    <img class="img_logo" src="img/logo_icon.png"></div>
+                <div class="slot" id="6" onClick="changeColor(this.id)">
+                    <img class="img_logo" src="img/logo_icon.png"></div>
+            </div>
+            <div class="info_zone">
+                <p>free <br> slots: </p>
+                <p id="count"></p>
+
+                <p class="price">Parking price:
+                    <ul>
+                        <li>1 hour - 5$</li>
+                        <li>2 hour - 10$</li>
+                        <li>3 hour - 15$</li>
+                        <li>1 day - 150$</li>
+                    </ul>                                     
+                </p>
+            </div>            
+    </div> 
+   
+</body>
+<script type="text/javascript" src="board.js"></script>
+
+</html>
