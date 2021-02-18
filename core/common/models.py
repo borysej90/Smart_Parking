@@ -19,13 +19,13 @@ class ParkingSite(models.Model):
 
 class VideoProcessor(models.Model):
     id = models.AutoField(primary_key=True)
-    type = models.ForeignKey(VideoProcessorType, on_delete=models.CASCADE,)
-    parking_site = models.ForeignKey(ParkingSite, on_delete=models.CASCADE,)
+    type = models.ForeignKey(VideoProcessorType, on_delete=models.CASCADE)
+    parking_site = models.ForeignKey(ParkingSite, on_delete=models.CASCADE)
     stream_url = models.CharField(max_length=100)
 
 
 class ParkingLot(models.Model):
     id = models.AutoField(primary_key=True)
     coordinates = ArrayField(models.IntegerField())
-    parking_site = models.ForeignKey(ParkingSite, on_delete=models.CASCADE,)
+    parking_site = models.ForeignKey(ParkingSite, on_delete=models.CASCADE)
     is_occupied = models.BooleanField()
