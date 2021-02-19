@@ -15,7 +15,7 @@ class ParkingList(APIView):
         return Response(serializer.data)
 
     def post(self, request, site_id, format=None):
-        serializer = ParkingLotSerializer(data=request.data)
+        serializer = ParkingLotSerializer(data=request.data, many=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
