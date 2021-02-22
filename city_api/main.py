@@ -118,7 +118,7 @@ class ParkingLot(Resource):
                 return result, 200
 
         elif not some_site:
-            abort(404g,
+            abort(404,
                   message=f"Parking site with address - {address} does not exist, please create parking site and then add lots")
             return None
 
