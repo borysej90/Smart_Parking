@@ -1,6 +1,8 @@
 from flask import Flask, request
 from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import relationship
+from sqlalchemy import ForeignKey
 
 
 app = Flask(__name__)
@@ -11,130 +13,162 @@ api = Api(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 db = SQLAlchemy(app)
 
-# Create model and columns for sqlalchemy DB
-class ParkingModel(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    is_paid = db.Column(db.Boolean, nullable=False)
-    parking_slot = db.Column(db.Integer, nullable = True)
+# Model for parking sites
+class Sites(db.Model):
+    __tablename__ = "sites"
 
+    id = db.Column(db.Integer, primary_key=True)
+    lots = relationship("Lots", backref='site')
+    address = db.Column(db.String(50))
+
+# Model for parking lots
+class Lots(db.Model):
+    __tablename__ = "lots"
+
+    id = db.Column(db.Integer, primary_key=True)
+    lot_number = db.Column(db.Integer)
+    is_paid = db.Column(db.Integer)
+    site_id = db.Column(db.Integer, ForeignKey('sites.id'))
 
 # Initialize DB
 # NOTE: Run only once so you won't initialize DB every time you run script!!!!!!!!!!!!!!!
-#db.create_all()
+# db.create_all()
 
-# Arg parser for PUT
-parking_put_args = reqparse.RequestParser()
-parking_put_args.add_argument("is_paid", type=bool, help="Was parking lot paid for?", required = True)
-parking_put_args.add_argument("parking_slot", type=int, help="Number of parking slot", required = True)
-
-# Arg parser for UPDATE(patch)
-parking_update_args = reqparse.RequestParser()
-parking_update_args.add_argument("is_paid", type=bool, help="Was parking lot paid for?")
-parking_update_args.add_argument("parking_slot", type=int, help="Number of parking slot")
-
-
-
-
-resource_filed = {
-    'id': fields.Integer,
-    'parking_slot': fields.Integer,
-    'is_paid' : fields.Boolean
+lot_resource_filed = {
+    'site_id': fields.Integer,
+    'lot_id': fields.Integer,
+    'is_paid': fields.Integer,
+    'lot_number': fields.Integer,
+    'address': fields.String(50)
 }
-class ParkingSlot(Resource):
-    @marshal_with(resource_filed)
-    def get(self,parking_id,parking_slot):
+site_resource_field = {
+    'id': fields.Integer,
+    'address': fields.String(50)
+}
+class GetParkingLot(Resource):
+    @marshal_with(lot_resource_filed)
+    def get(self, site_address, lot_number):
         """
+            THIS CLASS IS USED TO GET PARKING LOTS ONLY
+
             BASIC GET REQUEST :
+
             BASE = 'http://127.0.0.1:5000/'
-            response = requests.get(BASE + "parking/1/slot/1")
+            response = requests.get(BASE + "parking/Prospect_Ratushnyaka/lot_number/1")
             print(response.json())
         """
+        # Find specified parking site
+        site = Sites.query.filter_by(address=site_address).first()
 
-        # Find specified parking
-        parking_space = ParkingModel.query.filter_by(id=parking_id).first()
+        # Check if site exists
+        if site:
 
-        # Check if parking with specified id exists
-        if not parking_space:
-            abort(404, message="Could not find parking space with this id")
+            lot = Lots.query.filter_by(site=site, lot_number=lot_number).first()
 
-        result = parking_space.query.filter_by(id=parking_id,parking_slot=parking_slot).first()
+            # Check if lot exists
+            if not lot:
+                 abort(404, message=f"Could not find parking lot with number - {lot_number}")
 
-        if not result:
-            abort(404, message="Could not find parking slot with this id")
+            # Create and return result
+            result = {'lot_id': lot.id, 'lot_number': lot.lot_number,
+                      'is_paid': lot.is_paid, 'site_id': site.id, 'address': site.address}
+            return result
+        # If site was not found
+        elif not site:
+            abort(404, message=f"Could not find parking site with address - {site_address}")
 
-        return result
 
-api.add_resource(ParkingSlot, "/parking/<int:parking_id>/slot/<int:parking_slot>")
+api.add_resource(GetParkingLot, "/parking/<string:site_address>/lot_number/<int:lot_number>")
 
-class Parking(Resource):
+class ParkingLot(Resource):
     """
+    THIS CLASS IS USED TO CREATE PARKING LOTS ONLY
+
+    BASIC POST REQUEST :
+
+    BASE = 'http://127.0.0.1:5000/'
+    response = requests.get(BASE + 'parking/Prospect_Ratushnyaka/lot_number/4/is_paid/1')
+    print(response.json())
+
+    """
+    @marshal_with(lot_resource_filed)
+    def post(self, is_paid, lot_number, address):
+
+        # Find site with specified id
+        some_site = Sites.query.filter_by(address=address).first()
+
+        site_id = some_site.id
+
+        # If it exists
+        if some_site:
+            # Check if specified lot number already exists and if there are any lots
+            if len(some_site.lots) > 0  and Lots.query.filter_by(lot_number=lot_number).filter_by(site_id=site_id).first():
+                abort(400, message=f'Lot with number - {lot_number} already exists in site with address - {address}')
+            else:
+                # Create lot
+                lot = Lots(site=some_site, is_paid=is_paid, lot_number=lot_number)
+
+                # Add lot to db and commit
+                db.session.add(lot)
+                db.session.commit()
+
+                #Create and return result
+                result = {'lot_id': lot.id, 'site_id': some_site.id, 'lot_number': lot_number,
+                          'is_paid': is_paid, 'address': some_site.address}
+                return result, 200
+
+        elif not some_site:
+            abort(404g,
+                  message=f"Parking site with address - {address} does not exist, please create parking site and then add lots")
+            return None
+
+api.add_resource(ParkingLot, "/parking/<string:address>/lot_number/<int:lot_number>/is_paid/<int:is_paid>")
+
+
+class ParkingSite(Resource):
+    """
+    THIS CLASS IS USED TO POST OR GET PARKING SITE ONLY
+
     BASIC GET REQUEST :
+
         BASE = 'http://127.0.0.1:5000/'
-        response = requests.get(BASE + "parking/1")
+        response = requests.get(BASE + "parking/Prospect_Ratushnyaka")
         print(response.json())
+
     BASIC PUT REQUSET :
+
         BASE = 'http://127.0.0.1:5000/'
-        response = request.put(BASE + parking/1,{"total_lots":10,"free_lots":4})
+        response = request.put(BASE + parking/Prospect Ratushnyaka)
         print(response.json())
-    BASIC UPDATE AND DELETE WILL BE ADDED LATER
     """
-    @marshal_with(resource_filed)
-    def get(self,parking_id):
+    @marshal_with(site_resource_field)
+    def get(self, address):
 
         # Find specified parking
-        result = ParkingModel.query.filter_by(id=parking_id).first()
+        site = Sites.query.filter_by(address=address).first()
 
-        # Check if parking with specified id exists
-        if not result:
-            abort(404, message="Could not find parking space with this id")
+        # Check if parking with specified address exists
+        if not site:
+            abort(404, message=f"Could not find parking site with this address - {address}")
 
-        return result
+        return {'site_id': site.id, 'address': site.address}, 200
 
-    @marshal_with(resource_filed)
-    def post(self,parking_id):
+    @marshal_with(site_resource_field)
+    def post(self, address):
 
-        # Read args
-        args = parking_put_args.parse_args()
+        # Check if site with specified address exists
+        if Sites.query.filter_by(address=address).first():
+            abort(400, message=f"Site with this address - {address} already exists")
+        else:
+            # Create new site
+            site = Sites(address=address)
+            db.session.add(site)
+            db.session.commit()
 
-        # Check if there are no parkings with such id
-        if ParkingModel.query.filter_by(id=parking_id).first():
-            abort(409, message = 'Parking id already exists')
+            # Return instance and 200 code
+            return site, 200
 
-        # Create new parking instance
-        parking = ParkingModel(id=parking_id, parking_slot=args['parking_slot'], is_paid=args['is_paid'])
-
-        # Add new instance to DB
-        db.session.add(parking)
-        db.session.commit()
-
-        # Return instance and 200 code
-        return parking, 200
-
-    # NOT WORKING IN THIS ISSUE
-    @marshal_with(resource_filed)
-    def patch(self, parking_id):
-
-        args = parking_update_args.parse_args()
-
-        result = ParkingModel.query.filter_by(id=parking_id).first()
-
-        if not result:
-            abort(404, message="Parking spot does not exist, cannot update")
-
-        if args['is_paid']:
-            ParkingModel.total_lots = args['is_paid']
-        if args['parking_slot']:
-            ParkingModel.free_lots = args['parking_slot']
-
-        db.session.commit()
-
-        return result
-
-    # WILL ADD LATER
-    def delete(self, parking_id):
-        pass
-
-api.add_resource(Parking, "/parking/<int:parking_id>")
+api.add_resource(ParkingSite, "/parking/<string:address>")
 
 
 if __name__ == '__main__':
