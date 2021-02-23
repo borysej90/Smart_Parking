@@ -45,7 +45,7 @@ site_resource_field = {
     'id': fields.Integer,
     'address': fields.String(50)
 }
-class ParkingLotGet(Resource):
+class GetParkingLot(Resource):
     @marshal_with(lot_resource_filed)
     def get(self, site_address, lot_number):
         """
@@ -54,7 +54,7 @@ class ParkingLotGet(Resource):
             BASIC GET REQUEST :
 
             BASE = 'http://127.0.0.1:5000/'
-            response = requests.get(BASE + "parking/Prospect Ratushnyaka/lot_number/1")
+            response = requests.get(BASE + "parking/Prospect_Ratushnyaka/lot_number/1")
             print(response.json())
         """
         # Find specified parking site
@@ -67,7 +67,7 @@ class ParkingLotGet(Resource):
 
             # Check if lot exists
             if not lot:
-                 abort(404, message=f"Could not find parking lot with number - {lot_number}")
+                 abort(400, message=f"Could not find parking lot with number - {lot_number}")
 
             # Create and return result
             result = {'lot_id': lot.id, 'lot_number': lot.lot_number,
@@ -75,10 +75,10 @@ class ParkingLotGet(Resource):
             return result
         # If site was not found
         elif not site:
-            abort(404, message=f"Could not find parking site with address - {site_address}")
+            abort(400, message=f"Could not find parking site with address - {site_address}")
 
 
-api.add_resource(ParkingLotGet, "/parking/<string:site_address>/lot_number/<int:lot_number>")
+api.add_resource(GetParkingLot, "/parking/<string:site_address>/lot_number/<int:lot_number>")
 
 class ParkingLot(Resource):
     """
@@ -87,7 +87,7 @@ class ParkingLot(Resource):
     BASIC POST REQUEST :
 
     BASE = 'http://127.0.0.1:5000/'
-    response = requests.get(BASE + 'parking/Prospect Ratushnyaka/lot_number/4/is_paid/1')
+    response = requests.get(BASE + 'parking/Prospect_Ratushnyaka/lot_number/4/is_paid/1')
     print(response.json())
 
     """
@@ -103,7 +103,7 @@ class ParkingLot(Resource):
         if some_site:
             # Check if specified lot number already exists and if there are any lots
             if len(some_site.lots) > 0  and Lots.query.filter_by(lot_number=lot_number).filter_by(site_id=site_id).first():
-                abort(404, message=f'Lot with number - {lot_number} already exists in site with address - {address}')
+                abort(400, message=f'Lot with number - {lot_number} already exists in site with address - {address}')
             else:
                 # Create lot
                 lot = Lots(site=some_site, is_paid=is_paid, lot_number=lot_number)
@@ -118,7 +118,7 @@ class ParkingLot(Resource):
                 return result, 200
 
         elif not some_site:
-            abort(404,
+            abort(400,
                   message=f"Parking site with address - {address} does not exist, please create parking site and then add lots")
             return None
 
@@ -132,7 +132,7 @@ class ParkingSite(Resource):
     BASIC GET REQUEST :
 
         BASE = 'http://127.0.0.1:5000/'
-        response = requests.get(BASE + "parking/Prospect Ratushnyaka")
+        response = requests.get(BASE + "parking/Prospect_Ratushnyaka")
         print(response.json())
 
     BASIC PUT REQUSET :
@@ -158,7 +158,7 @@ class ParkingSite(Resource):
 
         # Check if site with specified address exists
         if Sites.query.filter_by(address=address).first():
-            abort(404, message=f"Site with this address - {address} already exists")
+            abort(400, message=f"Site with this address - {address} already exists")
         else:
             # Create new site
             site = Sites(address=address)
