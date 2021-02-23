@@ -42,7 +42,7 @@ lot_resource_filed = {
     'address': fields.String(50)
 }
 site_resource_field = {
-    'site_id': fields.Integer,
+    'id': fields.Integer,
     'address': fields.String(50)
 }
 class ParkingSlotGet(Resource):
