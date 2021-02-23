@@ -67,7 +67,7 @@ class GetParkingLot(Resource):
 
             # Check if lot exists
             if not lot:
-                 abort(404, message=f"Could not find parking lot with number - {lot_number}")
+                 abort(400, message=f"Could not find parking lot with number - {lot_number}")
 
             # Create and return result
             result = {'lot_id': lot.id, 'lot_number': lot.lot_number,
@@ -75,7 +75,7 @@ class GetParkingLot(Resource):
             return result
         # If site was not found
         elif not site:
-            abort(404, message=f"Could not find parking site with address - {site_address}")
+            abort(400, message=f"Could not find parking site with address - {site_address}")
 
 
 api.add_resource(GetParkingLot, "/parking/<string:site_address>/lot_number/<int:lot_number>")
@@ -118,7 +118,7 @@ class ParkingLot(Resource):
                 return result, 200
 
         elif not some_site:
-            abort(404,
+            abort(400,
                   message=f"Parking site with address - {address} does not exist, please create parking site and then add lots")
             return None
 
