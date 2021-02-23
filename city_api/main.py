@@ -45,7 +45,7 @@ site_resource_field = {
     'id': fields.Integer,
     'address': fields.String(50)
 }
-class ParkingSlotGet(Resource):
+class ParkingLotGet(Resource):
     @marshal_with(lot_resource_filed)
     def get(self, site_address, lot_number):
         """
@@ -78,9 +78,9 @@ class ParkingSlotGet(Resource):
             abort(404, message=f"Could not find parking site with address - {site_address}")
 
 
-api.add_resource(ParkingSlotGet, "/parking/<string:site_address>/lot_number/<int:lot_number>")
+api.add_resource(ParkingLotGet, "/parking/<string:site_address>/lot_number/<int:lot_number>")
 
-class ParkingSlot(Resource):
+class ParkingLot(Resource):
     """
     THIS CLASS IS USED TO CREATE PARKING LOTS ONLY
 
@@ -122,10 +122,10 @@ class ParkingSlot(Resource):
                   message=f"Parking site with address - {address} does not exist, please create parking site and then add lots")
             return None
 
-api.add_resource(ParkingSlot, "/parking/<string:address>/lot_number/<int:lot_number>/is_paid/<int:is_paid>")
+api.add_resource(ParkingLot, "/parking/<string:address>/lot_number/<int:lot_number>/is_paid/<int:is_paid>")
 
 
-class Parking(Resource):
+class ParkingSite(Resource):
     """
     THIS CLASS IS USED TO POST OR GET PARKING SITE ONLY
 
@@ -168,7 +168,7 @@ class Parking(Resource):
             # Return instance and 200 code
             return site, 200
 
-api.add_resource(Parking, "/parking/<string:address>")
+api.add_resource(ParkingSite, "/parking/<string:address>")
 
 
 if __name__ == '__main__':
