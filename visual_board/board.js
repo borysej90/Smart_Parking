@@ -70,40 +70,40 @@ data = [
 red = "#ff6666";
 green = "#77e196";
 
-//create array of divs/slots
-slots = [];
-slots.length = data.length;
+//create array of divs/lots
+lots = [];
+lots.length = data.length;
 
-//set slots on their places
+//set lots on their places
 window.onload = function() {
     for (var i = 0; i < data.length; i++) {
 
-        //create div/slot
-        slots[i] = document.createElement("div");
+        //create div/lot
+        lots[i] = document.createElement("div");
         
-        //append div/slot to body
-        document.body.appendChild(slots[i]);
+        //append div/lot to body
+        document.body.appendChild(lots[i]);
         
-        //set slot id
-        slots[i].setAttribute("id", data[i].id);
+        //set lot id
+        lots[i].setAttribute("id", data[i].id);
         
-        //place div/slot on possition
-        slots[i].style.position = "absolute";
-        slots[i].style.left = data[i].x_pos + 'px';
-        slots[i].style.top = data[i].y_pos + 'px';
+        //place div/lot on possition
+        lots[i].style.position = "absolute";
+        lots[i].style.left = data[i].x_pos + 'px';
+        lots[i].style.top = data[i].y_pos + 'px';
 
-        //check if slot for disabled persons 
+        //check if lot for disabled persons 
         if (data[i].for_disabled == false) {
-            slots[i].className="slot";
+            lots[i].className="lot";
         }
         else{
-            //img for slots for_disabled persons
+            //img for lots for_disabled persons
             img = document.createElement("img"); 
             img.src = "images/logo_black.png";
             img.className = "img_prop";
 
-            slots[i].className="slot_for_disabled";
-            slots[i].appendChild(img);
+            lots[i].className="lot_for_disabled";
+            lots[i].appendChild(img);
         }
     }
 }
@@ -111,10 +111,10 @@ window.onload = function() {
 function ChangeColor(x) {
     for (var i = 0; i < data.length; i++) {
         if (data[i].is_ocupied == true) {
-            slots[i].style.backgroundColor = red;
+            lots[i].style.backgroundColor = red;
         }
         else{
-            slots[i].style.backgroundColor = green;
+            lots[i].style.backgroundColor = green;
         }
     }
 }   
