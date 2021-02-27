@@ -3,13 +3,14 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import ParkingLot
+from .models import ParkingLot, ParkingSite
 from .serializers import ParkingLotSerializer
 
 
 class ParkingList(APIView):
 
     def get(self, request, site_id, format=None):
+        site = get_object_or_404(ParkingSite, pk=site_id)
         lots = ParkingLot.objects.filter(parking_site=site_id)
         serializer = ParkingLotSerializer(lots, many=True)
         return Response(serializer.data)
