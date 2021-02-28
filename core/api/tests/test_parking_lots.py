@@ -84,8 +84,8 @@ class ParkingLotsTestCase(APITestCase):
         url = reverse('parking-lot', args=[site2.id, lot.id])
         response = self.client.get(url)
 
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND,
-                         'Status code is not 404. Given lot was found on improper parking site.')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST,
+                         'Status code is not 400. Given lot was found on improper parking site.')
 
     def test_detail_put(self):
         site = ParkingSite.objects.create(address='parking-site', lots_number=10, cameras_number=1, is_free=True)
@@ -112,8 +112,8 @@ class ParkingLotsTestCase(APITestCase):
         url = reverse('parking-lot', args=[site2.id, lot.id])
         response = self.client.put(url, new_lot)
 
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND,
-                         'Status code is not 404. Given lot was found on improper parking site.')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST,
+                         'Status code is not 400. Given lot was found on improper parking site.')
 
     def test_put_with_invalid_data(self):
         site = ParkingSite.objects.create(address='parking-site', lots_number=10, cameras_number=1, is_free=True)
@@ -147,8 +147,8 @@ class ParkingLotsTestCase(APITestCase):
         url = reverse('parking-lot', args=[site2.id, lot.id])
         response = self.client.patch(url, new_lot)
 
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND,
-                         'Status code is not 404. Given lot was found on improper parking site.')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST,
+                         'Status code is not 400. Given lot was found on improper parking site.')
 
     def test_patch_with_invalid_data(self):
         site = ParkingSite.objects.create(address='parking-site', lots_number=10, cameras_number=1, is_free=True)
@@ -180,5 +180,5 @@ class ParkingLotsTestCase(APITestCase):
         url = reverse('parking-lot', args=[site2.id, lot.id])
         response = self.client.delete(url)
 
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND,
-                         'Status code is not 404. Given lot was found on improper parking site.')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST,
+                         'Status code is not 400. Given lot was found on improper parking site.')
