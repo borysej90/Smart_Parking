@@ -29,7 +29,7 @@ class ParkingDetail(APIView):
         lot = get_object_or_404(ParkingLot, pk=pk)
 
         if lot.parking_site.id != site_id:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         serializer = ParkingLotSerializer(lot)
         return Response(serializer.data)
