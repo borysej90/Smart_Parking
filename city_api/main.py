@@ -58,10 +58,6 @@ class GetParkingLot(Resource):
             print(response.json())
         """
 
-        # Just so even if u F'd up it won't return NoneType
-        address = address.strip()
-        address = address.replace(" ", "_")
-
         # Find specified parking site
         site = Sites.query.filter_by(address=address).first()
 
@@ -99,17 +95,14 @@ class ParkingLot(Resource):
     @marshal_with(lot_resource_filed)
     def post(self, is_paid, lot_number, address):
 
-        # Just so even if u F'd up it won't return NoneType
-        address = address.strip()
-        address = address.replace(" ", "_")
-
         # Find site with specified id
         site = Sites.query.filter_by(address=address).first()
 
-        site_id = site.id
-
         # If it exists
         if site:
+
+            site_id = site.id
+
             # Check if specified lot number already exists and if there are any lots
             if len(site.lots) > 0  and Lots.query.filter_by(lot_number=lot_number).filter_by(site_id=site_id).first():
                 abort(400, message=f'Lot with number - {lot_number} already exists in site with address - {address}')
@@ -142,7 +135,7 @@ class GetAllParkingSites(Resource):
     BASIC REQUEST:
 
     BASE = 'http://127.0.0.1:5000/'
-    response = requests.get(BASE + 'parking/Another Prospect/all')
+    response = requests.get(BASE + 'parking/Another_Prospect/all')
     print(response.json())
 
     """
@@ -150,10 +143,6 @@ class GetAllParkingSites(Resource):
     @marshal_with(lot_resource_filed)
     def get(self,address):
         result = []
-
-        # Just so even if u F'd up it won't return NoneType
-        address = address.strip()
-        address = address.replace(" ", "_")
 
         # Find parking site with specified address
         site = Sites.query.filter_by(address=address).first()
@@ -186,15 +175,11 @@ class ParkingSite(Resource):
     BASIC PUT REQUSET :
 
         BASE = 'http://127.0.0.1:5000/'
-        response = request.put(BASE + parking/Prospect Ratushnyaka)
+        response = request.put(BASE + parking/Prospect_Ratushnyaka)
         print(response.json())
     """
     @marshal_with(site_resource_field)
     def get(self, address):
-
-        # Just so even if u F'd up it won't return NoneType
-        address = address.strip()
-        address = address.replace(" ", "_")
 
         # Find specified parking
         site = Sites.query.filter_by(address=address).first()
@@ -207,10 +192,6 @@ class ParkingSite(Resource):
 
     @marshal_with(site_resource_field)
     def post(self, address):
-
-        # Make sure that string is according to standard
-        address = address.strip()
-        address = address.replace(" ", "_")
 
         # Check if site with specified address exists
         if Sites.query.filter_by(address=address).first():
