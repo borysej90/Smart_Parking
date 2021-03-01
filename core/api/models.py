@@ -9,13 +9,14 @@ class VideoProcessorType(models.Model):
     type_name = models.CharField(max_length=50)
     image_url = models.CharField(max_length=100)
     tag = models.CharField(max_length=100)
+    is_active = models.BooleanField()
 
 
 class ParkingSite(models.Model):
     id = models.AutoField(primary_key=True)
     address = models.CharField(max_length=100)
-    lots_number = models.IntegerField()
-    cameras_number = models.IntegerField()
+    lots_number = models.IntegerField(blank=True)
+    cameras_number = models.IntegerField(blank=True)
     is_free = models.BooleanField()
 
 
@@ -31,3 +32,4 @@ class ParkingLot(models.Model):
     coordinates = ArrayField(models.IntegerField())
     parking_site = models.ForeignKey(ParkingSite, on_delete=models.CASCADE)
     is_occupied = models.BooleanField()
+    is_for_disabled = models.BooleanField()
