@@ -37,8 +37,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False)),
                 ('stream_url', models.CharField(max_length=100)),
-                ('parking_site', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='common.parkingsite')),
-                ('type', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='common.videoprocessortype')),
+                ('parking_site', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.parkingsite')),
+                ('type', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.videoprocessortype')),
             ],
         ),
         migrations.CreateModel(
@@ -47,7 +47,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(primary_key=True, serialize=False)),
                 ('coordinates', django.contrib.postgres.fields.ArrayField(base_field=models.IntegerField(), size=None)),
                 ('is_occupied', models.BooleanField()),
-                ('parking_site', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='common.parkingsite')),
+                ('parking_site', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.parkingsite')),
             ],
         ),
     ]
