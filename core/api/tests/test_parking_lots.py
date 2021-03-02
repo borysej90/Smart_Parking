@@ -11,8 +11,8 @@ from api.serializers import ParkingLotSerializer
 class ParkingLotsTestCase(APITestCase):
     def test_get(self):
         site = ParkingSite.objects.create(address='parking-site-1', lots_number=10, cameras_number=1, is_free=True)
-        lot1 = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site, is_occupied=False)
-        lot2 = ParkingLot.objects.create(coordinates=[2, 2], parking_site=site, is_occupied=True)
+        lot1 = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site, is_occupied=False, is_for_disabled=False)
+        lot2 = ParkingLot.objects.create(coordinates=[2, 2], parking_site=site, is_occupied=True, is_for_disabled=True)
 
         url = reverse('parking-lots', args=[site.id])
         response = self.client.get(url)
@@ -28,13 +28,15 @@ class ParkingLotsTestCase(APITestCase):
         lots = [
             {
                 'coordinates': [1, 1],
-                'is_occupied': 'false',
-                'parking_site_id': site.id
+                'is_occupied': False,
+                'parking_site_id': site.id,
+                'is_for_disabled': False
             },
             {
                 'coordinates': [2, 2],
-                'is_occupied': 'true',
-                'parking_site_id': site.id
+                'is_occupied': True,
+                'parking_site_id': site.id,
+                'is_for_disabled': True
             }
         ]
 
@@ -50,7 +52,7 @@ class ParkingLotsTestCase(APITestCase):
         lots = [
             {
                 'coordinates': 5,
-                'is_occupied': 'false'
+                'is_occupied': False
             },
             {
                 'coordinates': [2, 2],
@@ -66,7 +68,7 @@ class ParkingLotsTestCase(APITestCase):
 
     def test_detail_get(self):
         site = ParkingSite.objects.create(address='parking-site-1', lots_number=10, cameras_number=1, is_free=True)
-        lot = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site, is_occupied=False)
+        lot = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site, is_occupied=False, is_for_disabled=False)
 
         url = reverse('parking-lot', args=[site.id, lot.id])
         response = self.client.get(url)
@@ -79,7 +81,7 @@ class ParkingLotsTestCase(APITestCase):
     def test_detail_get_with_another_parking_site(self):
         site1 = ParkingSite.objects.create(address='parking-site-1', lots_number=10, cameras_number=1, is_free=True)
         site2 = ParkingSite.objects.create(address='parking-site-2', lots_number=20, cameras_number=2, is_free=False)
-        lot = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site1, is_occupied=False)
+        lot = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site1, is_occupied=False, is_for_disabled=False)
 
         url = reverse('parking-lot', args=[site2.id, lot.id])
         response = self.client.get(url)
@@ -89,8 +91,8 @@ class ParkingLotsTestCase(APITestCase):
 
     def test_detail_put(self):
         site = ParkingSite.objects.create(address='parking-site', lots_number=10, cameras_number=1, is_free=True)
-        lot = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site, is_occupied=False)
-        new_lot = {'coordinates': [2, 2], 'is_occupied': True, 'parking_site_id': site.id}
+        lot = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site, is_occupied=False, is_for_disabled=False)
+        new_lot = {'coordinates': [2, 2], 'is_occupied': True, 'parking_site_id': site.id, 'is_for_disabled': True}
 
         url = reverse('parking-lot', args=[site.id, lot.id])
         response = self.client.put(url, new_lot)
@@ -106,8 +108,8 @@ class ParkingLotsTestCase(APITestCase):
     def test_detail_put_with_another_parking_site(self):
         site1 = ParkingSite.objects.create(address='parking-site-1', lots_number=10, cameras_number=1, is_free=True)
         site2 = ParkingSite.objects.create(address='parking-site-2', lots_number=20, cameras_number=2, is_free=False)
-        lot = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site1, is_occupied=False)
-        new_lot = {'coordinates': [2, 2], 'is_occupied': True, 'parking_site_id': site1.id}
+        lot = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site1, is_occupied=False, is_for_disabled=False)
+        new_lot = {'coordinates': [2, 2], 'is_occupied': True, 'parking_site_id': site1.id, 'is_for_disabled': True}
 
         url = reverse('parking-lot', args=[site2.id, lot.id])
         response = self.client.put(url, new_lot)
@@ -117,8 +119,8 @@ class ParkingLotsTestCase(APITestCase):
 
     def test_put_with_invalid_data(self):
         site = ParkingSite.objects.create(address='parking-site', lots_number=10, cameras_number=1, is_free=True)
-        lot = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site, is_occupied=False)
-        new_lot = {'coordinates': 5, 'is_occupied': 'invalid boolean', 'parking_site_id': site.id}
+        lot = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site, is_occupied=False, is_for_disabled=False)
+        new_lot = {'coordinates': 5, 'is_occupied': 'invalid boolean', 'parking_site_id': site.id, 'is_for_disabled': 123}
 
         url = reverse('parking-lot', args=[site.id, lot.id])
         response = self.client.put(url, new_lot)
@@ -128,7 +130,7 @@ class ParkingLotsTestCase(APITestCase):
 
     def test_detail_patch(self):
         site = ParkingSite.objects.create(address='parking-site', lots_number=10, cameras_number=1, is_free=True)
-        lot = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site, is_occupied=False)
+        lot = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site, is_occupied=False, is_for_disabled=False)
         new_lot = {'coordinates': [2, 2]}
 
         url = reverse('parking-lot', args=[site.id, lot.id])
@@ -141,7 +143,7 @@ class ParkingLotsTestCase(APITestCase):
     def test_detail_patch_with_another_parking_site(self):
         site1 = ParkingSite.objects.create(address='parking-site-1', lots_number=10, cameras_number=1, is_free=True)
         site2 = ParkingSite.objects.create(address='parking-site-2', lots_number=20, cameras_number=2, is_free=False)
-        lot = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site1, is_occupied=False)
+        lot = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site1, is_occupied=False, is_for_disabled=False)
         new_lot = {'coordinates': [2, 2]}
 
         url = reverse('parking-lot', args=[site2.id, lot.id])
@@ -152,7 +154,7 @@ class ParkingLotsTestCase(APITestCase):
 
     def test_patch_with_invalid_data(self):
         site = ParkingSite.objects.create(address='parking-site', lots_number=10, cameras_number=1, is_free=True)
-        lot = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site, is_occupied=False)
+        lot = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site, is_occupied=False, is_for_disabled=True)
         new_lot = {'coordinates': True, 'something': [1, 2, 3]}
 
         url = reverse('parking-lot', args=[site.id, lot.id])
@@ -163,7 +165,7 @@ class ParkingLotsTestCase(APITestCase):
 
     def test_detail_delete(self):
         site = ParkingSite.objects.create(address='parking-site', lots_number=10, cameras_number=1, is_free=True)
-        lot = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site, is_occupied=False)
+        lot = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site, is_occupied=False, is_for_disabled=False)
 
         url = reverse('parking-lot', args=[site.id, lot.id])
         response = self.client.delete(url)
@@ -175,7 +177,7 @@ class ParkingLotsTestCase(APITestCase):
     def test_detail_delete_with_another_parking_site(self):
         site1 = ParkingSite.objects.create(address='parking-site-1', lots_number=10, cameras_number=1, is_free=True)
         site2 = ParkingSite.objects.create(address='parking-site-2', lots_number=20, cameras_number=2, is_free=False)
-        lot = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site1, is_occupied=False)
+        lot = ParkingLot.objects.create(coordinates=[1, 1], parking_site=site1, is_occupied=False, is_for_disabled=False)
 
         url = reverse('parking-lot', args=[site2.id, lot.id])
         response = self.client.delete(url)
