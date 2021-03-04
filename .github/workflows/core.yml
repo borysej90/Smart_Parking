@@ -51,10 +51,11 @@ jobs:
     needs: [ validate_code ]
 
     steps:
+      - uses: actions/checkout@v2
       - name: Build docker image
         uses: docker/build-push-action@v2.3.0
         with:
-          file: Dockerfile
           context: ./core
+          file: ./core/Dockerfile
           tags: workflow_container:latest
           push: false
