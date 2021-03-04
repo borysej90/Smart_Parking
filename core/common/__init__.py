@@ -1,1 +1,1 @@
-from .meta_classes import Singleton
+from .meta_classes import Singleton # noqa

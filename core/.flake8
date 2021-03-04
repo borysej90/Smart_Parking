@@ -1,0 +1,5 @@
+[flake8]
+exclude = .git,__pycache__,site-packages,.idea,.vscode,migrations
+ignore = E501
+
+import-order-style = smarkets

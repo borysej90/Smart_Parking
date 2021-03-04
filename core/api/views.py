@@ -8,9 +8,8 @@ from .serializers import ParkingLotSerializer
 
 
 class ParkingList(APIView):
-
     def get(self, request, site_id, format=None):
-        site = get_object_or_404(ParkingSite, pk=site_id)
+        _ = get_object_or_404(ParkingSite, pk=site_id)
         lots = ParkingLot.objects.filter(parking_site=site_id)
         serializer = ParkingLotSerializer(lots, many=True)
         return Response(serializer.data)
@@ -24,7 +23,6 @@ class ParkingList(APIView):
 
 
 class ParkingDetail(APIView):
-
     def get(self, request, site_id, pk, format=None):
         lot = get_object_or_404(ParkingLot, pk=pk)
 

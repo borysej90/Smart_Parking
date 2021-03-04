@@ -1,5 +1,5 @@
-from django.conf import settings
 import zmq
+from django.conf import settings
 
 from ..common import Singleton
 
@@ -10,6 +10,7 @@ class Publisher(metaclass=Singleton):
 
     Only sending Parking lots currently implemented.
     """
+
     def __init__(self):
         port = settings.env.str('ZMQ_PUB_PORT')
         self._ctx = zmq.Context()

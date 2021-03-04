@@ -2,8 +2,6 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 
-# Create your models here.
-
 class VideoProcessorType(models.Model):
     id = models.AutoField(primary_key=True)
     type_name = models.CharField(max_length=50)
