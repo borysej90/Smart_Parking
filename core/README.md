@@ -214,7 +214,7 @@ POST /api/sites/<int:site_id>/lots/
 #### Request
 
 ```http
-GET api/sites/<int:site_id>/lots/<int:id>/
+GET /api/sites/<int:site_id>/lots/<int:id>/
 ```
 
 #### Parameters
@@ -261,7 +261,7 @@ GET api/sites/<int:site_id>/lots/<int:id>/
 #### Request
 
 ```http
-PUT api/sites/<int:site_id>/lots/<int:id>/
+PUT /api/sites/<int:site_id>/lots/<int:id>/
 ```
 
 #### Parameters
@@ -332,7 +332,7 @@ PUT api/sites/<int:site_id>/lots/<int:id>/
 #### Request
 
 ```http
-PATCH api/sites/<int:site_id>/lots/<int:id>/
+PATCH /api/sites/<int:site_id>/lots/<int:id>/
 ```
 
 #### Parameters
@@ -394,7 +394,7 @@ PATCH api/sites/<int:site_id>/lots/<int:id>/
 #### Request
 
 ```http
-DELETE api/sites/<int:site_id>/lots/<int:id>/
+DELETE /api/sites/<int:site_id>/lots/<int:id>/
 ```
 
 #### Parameters
