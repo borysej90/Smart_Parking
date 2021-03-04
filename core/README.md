@@ -64,6 +64,7 @@ GET /api/sites/<int:site_id>/lots/
 | `site_id` | `int` | **Required**. ID of parking site |
 
 #### Responses
+
 *NOTE: response type is `Array`*
 
 ```json
@@ -72,8 +73,10 @@ GET /api/sites/<int:site_id>/lots/
     "id": 1,
     "parking_site_id": 1,
     "coordinates": [
-      65,
-      121
+      65, 121,
+      82, 119,
+      62, 135,
+      93, 130
     ],
     "is_occupied": true,
     "is_for_disabled": true
@@ -82,13 +85,14 @@ GET /api/sites/<int:site_id>/lots/
     "id": 5,
     "parking_site_id": 1,
     "coordinates": [
-      87,
-      256
+      87, 256,
+      120, 259,
+      82, 290,
+      125, 289
     ],
     "is_occupied": true,
     "is_for_disabled": false
   },
-  
   ...
 ]
 ```
@@ -97,7 +101,7 @@ GET /api/sites/<int:site_id>/lots/
 | :--- | :--- | :--- |
 | `id` | `int` | Id of the current parking lot. |
 | `parking_site_id` | `int` | Id of the current parking site. |
-| `coordinates` | `array<int>` | Visual coordinates of the current parking lot. |
+| `coordinates` | `array<int>` | Visual coordinates of the current parking lot. <br /> *Format: [x1, y1, x2, y2, x3, y3, x4, y4]*|
 | `is_occupied` | `boolean` | Describes if the parking lot is occupied. |
 | `is_for_disabled` | `boolean` | Describes if the parking lot is for people with disabilities. |
 
@@ -108,6 +112,7 @@ GET /api/sites/<int:site_id>/lots/
 | 404 `NOT FOUND` | The parking site was not found. |
 
 ---
+
 #### Request
 
 ```http
@@ -123,13 +128,16 @@ POST /api/sites/<int:site_id>/lots/
 #### Body
 
 *NOTE: request type is `Array`*
+
 ```json
 [
   {
     "parking_site_id": 1,
     "coordinates": [
-      65,
-      121
+      65, 121,
+      82, 119,
+      62, 135,
+      93, 130
     ],
     "is_occupied": true,
     "is_for_disabled": true
@@ -137,13 +145,14 @@ POST /api/sites/<int:site_id>/lots/
   {
     "parking_site_id": 1,
     "coordinates": [
-      87,
-      256
+      87, 256,
+      120, 259,
+      82, 290,
+      125, 289
     ],
     "is_occupied": true,
     "is_for_disabled": false
   },
-  
   ...
 ]
 ```
@@ -151,11 +160,12 @@ POST /api/sites/<int:site_id>/lots/
 | Key | Type | Description |
 | :--- | :--- | :--- |
 | `parking_site_id` | `int` | Id of the current parking site. |
-| `coordinates` | `array<int>` | Visual coordinates of the current parking lot. |
+| `coordinates` | `array<int>` | Visual coordinates of the current parking lot. <br /> *Format: [x1, y1, x2, y2, x3, y3, x4, y4]* |
 | `is_occupied` | `boolean` | Describes if the parking lot is occupied. |
 | `is_for_disabled` | `boolean` | Describes if the parking lot is for people with disabilities. |
 
 #### Responses
+
 *NOTE: response type is `Array`*
 
 ```json
@@ -164,8 +174,10 @@ POST /api/sites/<int:site_id>/lots/
     "id": 1,
     "parking_site_id": 1,
     "coordinates": [
-      65,
-      121
+      65, 121,
+      82, 119,
+      62, 135,
+      93, 130
     ],
     "is_occupied": true,
     "is_for_disabled": true
@@ -174,13 +186,14 @@ POST /api/sites/<int:site_id>/lots/
     "id": 5,
     "parking_site_id": 1,
     "coordinates": [
-      87,
-      256
+      87, 256,
+      120, 259,
+      82, 290,
+      125, 289
     ],
     "is_occupied": true,
     "is_for_disabled": false
   },
-  
   ...
 ]
 ```
@@ -189,7 +202,7 @@ POST /api/sites/<int:site_id>/lots/
 | :--- | :--- | :--- |
 | `id` | `int` | Id of the current parking lot. |
 | `parking_site_id` | `int` | Id of the current parking site. |
-| `coordinates` | `array<int>` | Visual coordinates of the current parking lot. |
+| `coordinates` | `array<int>` | Visual coordinates of the current parking lot. <br /> *Format: [x1, y1, x2, y2, x3, y3, x4, y4]* |
 | `is_occupied` | `boolean` | Describes if the parking lot is occupied. |
 | `is_for_disabled` | `boolean` | Describes if the parking lot is for people with disabilities. |
 
@@ -200,3 +213,209 @@ POST /api/sites/<int:site_id>/lots/
 | 400 `NOT FOUND` | Request body is invalid. |
 
 ---
+
+#### Request
+
+```http
+GET api/sites/<int:site_id>/lots/<int:id>/
+```
+
+#### Parameters
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `site_id` | `int` | **Required**. ID of parking site |
+| `id` | `int` | **Required**. ID of parking lot |
+
+#### Responses
+
+```json
+{
+  "id": 1,
+  "parking_site_id": 1,
+  "coordinates": [
+    65, 121,
+    82, 119,
+    62, 135,
+    93, 130
+  ],
+  "is_occupied": true,
+  "is_for_disabled": true
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `id` | `int` | Id of the current parking lot. |
+| `parking_site_id` | `int` | Id of the current parking site. |
+| `coordinates` | `array<int>` | Visual coordinates of the current parking lot. <br /> *Format: [x1, y1, x2, y2, x3, y3, x4, y4]* |
+| `is_occupied` | `boolean` | Describes if the parking lot is occupied. |
+| `is_for_disabled` | `boolean` | Describes if the parking lot is for people with disabilities. |
+
+#### Status Codes
+
+| Status Code | Condition |
+| :--- | :--- |
+| 400 `BAD REQUEST` | The parking site does not contain the requested parking lot. |
+| 404 `NOT FOUND` | The parking site was not found. |
+
+---
+
+#### Request
+
+```http
+PUT api/sites/<int:site_id>/lots/<int:id>/
+```
+
+#### Parameters
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `site_id` | `int` | **Required**. ID of parking site |
+| `id` | `int` | **Required**. ID of parking lot |
+
+#### Body
+
+```json
+{
+  "id": 1,
+  "parking_site_id": 1,
+  "coordinates": [
+    65, 121,
+    82, 119,
+    62, 135,
+    93, 130
+  ],
+  "is_occupied": false,
+  "is_for_disabled": false
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `parking_site_id` | `int` | Id of the current parking site. |
+| `coordinates` | `array<int>` | Visual coordinates of the current parking lot. <br /> *Format: [x1, y1, x2, y2, x3, y3, x4, y4]* |
+| `is_occupied` | `boolean` | Describes if the parking lot is occupied. |
+| `is_for_disabled` | `boolean` | Describes if the parking lot is for people with disabilities. |
+
+#### Responses
+
+```json
+{
+  "id": 1,
+  "parking_site_id": 1,
+  "coordinates": [
+    65, 121,
+    82, 119,
+    62, 135,
+    93, 130
+  ],
+  "is_occupied": false,
+  "is_for_disabled": false
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `id` | `int` | Id of the current parking lot. |
+| `parking_site_id` | `int` | Id of the current parking site. |
+| `coordinates` | `array<int>` | Visual coordinates of the current parking lot. <br /> *Format: [x1, y1, x2, y2, x3, y3, x4, y4]* |
+| `is_occupied` | `boolean` | Describes if the parking lot is occupied. |
+| `is_for_disabled` | `boolean` | Describes if the parking lot is for people with disabilities. |
+
+#### Status Codes
+
+| Status Code | Condition |
+| :--- | :--- |
+| 400 `BAD REQUEST` | The parking site does not contain the requested parking lot OR request body is invalid. |
+| 404 `NOT FOUND` | The parking site was not found. |
+
+---
+
+#### Request
+
+```http
+PATCH api/sites/<int:site_id>/lots/<int:id>/
+```
+
+#### Parameters
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `site_id` | `int` | **Required**. ID of parking site |
+| `id` | `int` | **Required**. ID of parking lot |
+
+#### Body
+
+```json
+{
+  "is_occupied": true
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `parking_site_id` | `int` | Id of the current parking site. |
+| `coordinates` | `array<int>` | Visual coordinates of the current parking lot. <br /> *Format: [x1, y1, x2, y2, x3, y3, x4, y4]* |
+| `is_occupied` | `boolean` | Describes if the parking lot is occupied. |
+| `is_for_disabled` | `boolean` | Describes if the parking lot is for people with disabilities. |
+
+#### Responses
+
+```json
+{
+  "id": 1,
+  "parking_site_id": 1,
+  "coordinates": [
+    65, 121,
+    82, 119,
+    62, 135,
+    93, 130
+  ],
+  "is_occupied": true,
+  "is_for_disabled": false
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `id` | `int` | Id of the current parking lot. |
+| `parking_site_id` | `int` | Id of the current parking site. |
+| `coordinates` | `array<int>` | Visual coordinates of the current parking lot. <br /> *Format: [x1, y1, x2, y2, x3, y3, x4, y4]* |
+| `is_occupied` | `boolean` | Describes if the parking lot is occupied. |
+| `is_for_disabled` | `boolean` | Describes if the parking lot is for people with disabilities. |
+
+#### Status Codes
+
+| Status Code | Condition |
+| :--- | :--- |
+| 400 `BAD REQUEST` | The parking site does not contain the requested parking lot OR request body is invalid. |
+| 404 `NOT FOUND` | The parking site was not found. |
+
+---
+
+#### Request
+
+```http
+DELETE api/sites/<int:site_id>/lots/<int:id>/
+```
+
+#### Parameters
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `site_id` | `int` | **Required**. ID of parking site |
+| `id` | `int` | **Required**. ID of parking lot |
+
+#### Responses
+
+```
+"Parking lot has been deleted!"
+```
+
+#### Status Codes
+
+| Status Code | Condition |
+| :--- | :--- |
+| 400 `BAD REQUEST` | The parking site does not contain the requested parking lot. |
+| 404 `NOT FOUND` | The parking site was not found. |
