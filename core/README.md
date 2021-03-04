@@ -207,7 +207,7 @@ POST /api/sites/<int:site_id>/lots/
 
 | Status Code | Condition |
 | :--- | :--- |
-| 400 `NOT FOUND` | Request body is invalid. |
+| 404 `NOT FOUND` | Request body is invalid. |
 
 ---
 
@@ -254,7 +254,7 @@ GET /api/sites/<int:site_id>/lots/<int:id>/
 | Status Code | Condition |
 | :--- | :--- |
 | 400 `BAD REQUEST` | The parking site does not contain the requested parking lot. |
-| 404 `NOT FOUND` | The parking site was not found. |
+| 404 `NOT FOUND` | The parking site or the parking lot was not found. |
 
 ---
 
