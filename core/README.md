@@ -92,8 +92,7 @@ GET /api/sites/<int:site_id>/lots/
     ],
     "is_occupied": true,
     "is_for_disabled": false
-  },
-  ...
+  }
 ]
 ```
 
@@ -152,8 +151,7 @@ POST /api/sites/<int:site_id>/lots/
     ],
     "is_occupied": true,
     "is_for_disabled": false
-  },
-  ...
+  }
 ]
 ```
 
@@ -193,8 +191,7 @@ POST /api/sites/<int:site_id>/lots/
     ],
     "is_occupied": true,
     "is_for_disabled": false
-  },
-  ...
+  }
 ]
 ```
 
