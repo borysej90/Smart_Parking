@@ -39,7 +39,6 @@ jobs:
           flake8 --show-source .
       - name: Run tests
         env:
-          DB_HOST: postgres
           DB_NAME: workflow_db
           DB_USER: user
           DB_PASSWORD: password
