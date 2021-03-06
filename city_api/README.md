@@ -22,7 +22,9 @@ POST /parking/<string:address>
 
 Response Example:
 
-```{'id': 2, 'address': 'Yeet_Street'}```
+```json
+{'id': 2, 'address': 'Yeet_Street'}
+```
 
 
 | Key | Type | Description |
@@ -49,7 +51,9 @@ POST /parking/<string:address>/lot_number/<int:lot_number>/is_paid/<int:is_paid>
 
 Response Exmaple:
 
-`{'site_id': 1, 'lot_id': 4, 'is_paid': True, 'lot_number': 4, 'address': 'Yeet_Prospect'}`
+```json
+{'site_id': 1, 'lot_id': 4, 'is_paid': True, 'lot_number': 4, 'address': 'Yeet_Prospect'}
+```
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
@@ -82,7 +86,7 @@ GET /parking/<string:address>/all
 Response Example:
 
 _NOTE:_ response type is `Array`
-```
+```json
 [{'site_id': 1, 'lot_id': 1, 'is_paid': True, 'lot_number': 1, 'address': 'Yeet_Prospect'},
  {'site_id': 1, 'lot_id': 2, 'is_paid': True, 'lot_number': 2, 'address': 'Yeet_Prospect'},
  {'site_id': 1, 'lot_id': 3, 'is_paid': False, 'lot_number': 3, 'address': 'Yeet_Prospect'}
@@ -114,7 +118,7 @@ GET /parking/<string:address>/lot_number/<int:lot_number>
 | `lot_number` | `string` | **Required**. Number of parking lot |
 
 Response Example: 
-```angular2html
+```json
 {'site_id': 1, 'lot_id': 1, 'is_paid': True, 'lot_number': 1, 'address': 'Yeet_Prospect'}
 ```
 | Key | Type | Description |
