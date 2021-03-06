@@ -23,7 +23,7 @@ POST /parking/<string:address>
 Response Example:
 
 ```json
-{'id': 2, 'address': 'Yeet_Street'}
+{"id": 2, "address": "Yeet_Street"}
 ```
 
 
@@ -52,7 +52,7 @@ POST /parking/<string:address>/lot_number/<int:lot_number>/is_paid/<int:is_paid>
 Response Exmaple:
 
 ```json
-{'site_id': 1, 'lot_id': 4, 'is_paid': True, 'lot_number': 4, 'address': 'Yeet_Prospect'}
+{"site_id": 1, "lot_id": 4, "is_paid": true, "lot_number": 4, "address": 'Yeet_Prospect'}
 ```
 
 | Key | Type | Description |
@@ -88,9 +88,9 @@ Response Example:
 _NOTE:_ response type is `Array`
 ```json
 [
-  {'site_id': 1, 'lot_id': 1, 'is_paid': True, 'lot_number': 1, 'address': 'Yeet_Prospect'},
-  {'site_id': 1, 'lot_id': 2, 'is_paid': True, 'lot_number': 2, 'address': 'Yeet_Prospect'},
-  {'site_id': 1, 'lot_id': 3, 'is_paid': False, 'lot_number': 3, 'address': 'Yeet_Prospect'}
+  {"site_id": 1, "lot_id": 1, "is_paid": true, "lot_number": 1, "address": "Yeet_Prospect"},
+  {"site_id": 1, "lot_id": 2, "is_paid": true, "lot_number": 2, "address": "Yeet_Prospect"},
+  {"site_id": 1, "lot_id": 3, "is_paid": false, "lot_number": 3, "address": "Yeet_Prospect"}
 ]
 ```
 | Key | Type | Description |
@@ -120,7 +120,7 @@ GET /parking/<string:address>/lot_number/<int:lot_number>
 
 Response Example: 
 ```json
-{'site_id': 1, 'lot_id': 1, 'is_paid': True, 'lot_number': 1, 'address': 'Yeet_Prospect'}
+{"site_id": 1, "lot_id": 1, "is_paid": true, "lot_number": 1, "address": 'Yeet_Prospect'}
 ```
 | Key | Type | Description |
 | :--- | :--- | :--- |
