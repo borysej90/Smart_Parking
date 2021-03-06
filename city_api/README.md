@@ -52,7 +52,7 @@ POST /parking/<string:address>/lot_number/<int:lot_number>/is_paid/<int:is_paid>
 Response Exmaple:
 
 ```json
-{"site_id": 1, "lot_id": 4, "is_paid": true, "lot_number": 4, "address": 'Yeet_Prospect'}
+{"site_id": 1, "lot_id": 4, "is_paid": true, "lot_number": 4, "address": "Yeet_Prospect"}
 ```
 
 | Key | Type | Description |
@@ -120,7 +120,7 @@ GET /parking/<string:address>/lot_number/<int:lot_number>
 
 Response Example: 
 ```json
-{"site_id": 1, "lot_id": 1, "is_paid": true, "lot_number": 1, "address": 'Yeet_Prospect'}
+{"site_id": 1, "lot_id": 1, "is_paid": true, "lot_number": 1, "address": "gYeet_Prospect"}
 ```
 | Key | Type | Description |
 | :--- | :--- | :--- |
