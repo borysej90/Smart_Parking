@@ -8,57 +8,123 @@ after that you can use Endpoints.
 ###POST
 There are few types of `POST` 
 
-####1._Posts parking site_
-```angular2html
-response = requests.post('http://127.0.0.1:5000/parking/Yeet_Street')
-print(response.json())
+####1._Parking site_
+```http 
+POST /parking/<string:address>
 ```
-**Returns `200` if everything is ok**
- 
+
+#### Parameters
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `parking` | `string` | **Required**. Address of parking site |
+
 
 Response Example:
 
-`{'id': 2, 'address': 'Yeet_Street'}`
+```{'id': 2, 'address': 'Yeet_Street'}```
 
-####2._Posts parking lot_ 
-```angular2html
-response = requests.post('http://127.0.0.1:5000/parking/Yeet_Prospect/lot_number/4/is_paid/1')
-print(response.json())
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `id` | `int` | Id of the specified parking site. |
+| `address` | `string` | Address of the specified parking site. |
+
+| Status Code | Condition |
+| :--- | :--- |
+| 400 `BAD REQUEST` | The parking site already exists. |
+
+####2._Parking lot_ 
+```http
+POST /parking/<string:address>/lot_number/<int:lot_number>/is_paid/<int:is_paid>
 ```
 
-####_NOTE: You have to create parking site before assigning any lots to it_
+####Parameters
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `parking` | `string` | **Required**. Address of parking site |
+| `lot_number` | `int` | **Required**. Number of parking lot |
+| `is_paid` | `int` | **Required**. Was parking paid for |
+
 
 Response Exmaple:
 
 `{'site_id': 1, 'lot_id': 4, 'is_paid': True, 'lot_number': 4, 'address': 'Yeet_Prospect'}`
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `site_id` | `int` | Id of the specified parking site. |
+| `lot_id` | `int` | Id of the specified parking lot. |
+| `lot_number` | `int` |  Number of specified parking lot |
+| `is_paid` | `bool` |  Was parking paid for |
+| `address` | `string` | Address of the specified parking site. |
+
+
+| Status Code | Condition |
+| :--- | :--- |
+| 400 `BAD REQUEST` | The parking lot already exists. |
+| 404 `NOT FOUND` | The parking site does not exist. |
+
 ###GET
 
-There are differenct types of `GET` endpoint
+####1.GET all info about parking site
 
-####1.Gets all info about parking site
-
-```angular2html
-response = requests.get('http://127.0.0.1:5000/parking/Yeet_Prospect/all')
-print(response.json())
+```http
+GET /parking/<string:address>/all
 ```
+
+####Parameters
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `parking` | `string` | **Required**. Address of parking site |
 
 
 Response Example:
-```angular2html
+
+_NOTE:_ response type is `Array`
+```
 [{'site_id': 1, 'lot_id': 1, 'is_paid': True, 'lot_number': 1, 'address': 'Yeet_Prospect'},
  {'site_id': 1, 'lot_id': 2, 'is_paid': True, 'lot_number': 2, 'address': 'Yeet_Prospect'},
  {'site_id': 1, 'lot_id': 3, 'is_paid': False, 'lot_number': 3, 'address': 'Yeet_Prospect'}
 ]
 ```
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `site_id` | `int` | Id of the specified parking site. |
+| `lot_id` | `int` | Id of the specified parking lot. |
+| `lot_number` | `int` |  Number of specified parking lot |
+| `is_paid` | `bool` | Was parking paid for |
+| `address` | `string` | Address of the specified parking site. |
 
-####2.Gets info about specified parking lot
+| Status Code | Condition |
+| :--- | :--- |
+| 404 `NOT FOUND` | The parking site does not exist. |
+| 404 `NOT FOUND` | The parking site does not have any lots. |
 
-```angular2html
-response = requests.get('http://127.0.0.1:5000/parking/Yeet_Prospect/lot_number/1')
-print(response.json())
+####2.GET info about specified parking lot
+
+```http
+GET /parking/<string:address>/lot_number/<int:lot_number>
 ```
+
+####Parameters
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `parking` | `string` | **Required**. Address of parking site |
+| `lot_number` | `string` | **Required**. Number of parking lot |
 
 Response Example: 
 ```angular2html
 {'site_id': 1, 'lot_id': 1, 'is_paid': True, 'lot_number': 1, 'address': 'Yeet_Prospect'}
 ```
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `site_id` | `int` | Id of the specified parking site. |
+| `lot_id` | `int` | Id of the specified parking lot. |
+| `lot_number` | `int` |  Number of specified parking lot |
+| `is_paid` | `bool` | Was parking paid for |
+| `address` | `string` | Address of the specified parking site. |
+
+| Status Code | Condition |
+| :--- | :--- |
+| 404 `NOT FOUND` | The parking site or lot does not exist. |
