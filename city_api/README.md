@@ -1,14 +1,14 @@
 ## City API Endpoints Usage
 
-###Initial steps
+### Initial steps
 
 First you have to run `main.py`.It will connect to Database `database.db`, 
 after that you can use Endpoints.
 
-###POST
+### POST
 There are few types of `POST` 
 
-####1._Parking site_
+#### 1._Parking site_
 ```http 
 POST /parking/<string:address>
 ```
@@ -36,12 +36,12 @@ Response Example:
 | :--- | :--- |
 | 400 `BAD REQUEST` | The parking site already exists. |
 
-####2._Parking lot_ 
+#### 2._Parking lot_ 
 ```http
 POST /parking/<string:address>/lot_number/<int:lot_number>/is_paid/<int:is_paid>
 ```
 
-####Parameters
+#### Parameters
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 | `parking` | `string` | **Required**. Address of parking site |
@@ -69,15 +69,15 @@ Response Exmaple:
 | 400 `BAD REQUEST` | The parking lot already exists. |
 | 404 `NOT FOUND` | The parking site does not exist. |
 
-###GET
+### GET
 
-####1.GET all info about parking site
+#### 1.GET all info about parking site
 
 ```http
 GET /parking/<string:address>/all
 ```
 
-####Parameters
+#### Parameters
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 | `parking` | `string` | **Required**. Address of parking site |
@@ -87,9 +87,10 @@ Response Example:
 
 _NOTE:_ response type is `Array`
 ```json
-[{'site_id': 1, 'lot_id': 1, 'is_paid': True, 'lot_number': 1, 'address': 'Yeet_Prospect'},
- {'site_id': 1, 'lot_id': 2, 'is_paid': True, 'lot_number': 2, 'address': 'Yeet_Prospect'},
- {'site_id': 1, 'lot_id': 3, 'is_paid': False, 'lot_number': 3, 'address': 'Yeet_Prospect'}
+[
+  {'site_id': 1, 'lot_id': 1, 'is_paid': True, 'lot_number': 1, 'address': 'Yeet_Prospect'},
+  {'site_id': 1, 'lot_id': 2, 'is_paid': True, 'lot_number': 2, 'address': 'Yeet_Prospect'},
+  {'site_id': 1, 'lot_id': 3, 'is_paid': False, 'lot_number': 3, 'address': 'Yeet_Prospect'}
 ]
 ```
 | Key | Type | Description |
@@ -105,13 +106,13 @@ _NOTE:_ response type is `Array`
 | 404 `NOT FOUND` | The parking site does not exist. |
 | 404 `NOT FOUND` | The parking site does not have any lots. |
 
-####2.GET info about specified parking lot
+#### 2.GET info about specified parking lot
 
 ```http
 GET /parking/<string:address>/lot_number/<int:lot_number>
 ```
 
-####Parameters
+#### пParameters
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 | `parking` | `string` | **Required**. Address of parking site |
