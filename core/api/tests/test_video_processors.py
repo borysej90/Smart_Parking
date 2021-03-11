@@ -1,8 +1,8 @@
 from django.urls import reverse
-from rest_framework.test import APITestCase
 from rest_framework import status
+from rest_framework.test import APITestCase
 
-from ..models import VideoProcessorType, VideoProcessor, ParkingSite, ParkingLot
+from ..models import ParkingLot, ParkingSite, VideoProcessor, VideoProcessorType
 
 INCORRECT_STATUS = 'Expected status code {} but got {}'
 

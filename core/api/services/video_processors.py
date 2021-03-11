@@ -1,5 +1,4 @@
 from django.shortcuts import get_object_or_404
-import re
 
 from ..models import VideoProcessor
 
