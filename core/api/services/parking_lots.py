@@ -16,7 +16,7 @@ def get_parking_map_by_processor_id(processor_id):
         List of objects which contains ID of the Parking site and its coordinates.
     """
     processor = get_object_or_404(VideoProcessor, pk=processor_id)
-    lots = processor.parking_site.lots.all()
+    lots = processor.lots.all()
 
     serializer = ParkingLotSerializer(lots, many=True)
     parking_lots_map = []
