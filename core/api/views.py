@@ -1,9 +1,13 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from django.http.response import HttpResponseServerError
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 
 from .models import ParkingLot, ParkingSite
+from .services.parking_lots import get_parking_map_by_processor_id
+from .services.video_processors import get_rtsp_url_by_processor_id
 from .serializers import ParkingLotSerializer
 
 
@@ -64,3 +68,20 @@ class ParkingDetail(APIView):
 
         lot.delete()
         return Response("Parking lot has been deleted!")
+
+
+@api_view(['GET'])
+def get_parking_lots_map(request, processor_id):
+    parking_lots_map = get_parking_map_by_processor_id(processor_id)
+
+    return Response(parking_lots_map)
+
+
+@api_view(['GET'])
+def get_camera_stream_url(request, processor_id):
+    url = get_rtsp_url_by_processor_id(processor_id)
+
+    if url == '':
+        return HttpResponseServerError()
+
+    return Response({'url': url})
