@@ -4,8 +4,24 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from ..models import ParkingLot, ParkingSite
+from ..models import ParkingLot, ParkingSite, VideoProcessor, VideoProcessorType
 from ..serializers import ParkingLotSerializer
+
+
+def init_video_processor(site: ParkingSite):
+    processor_type = VideoProcessorType.objects.create(
+        type_name='some_type',
+        image_url='https://example.com/image/',
+        tag="v1.0.0",
+    )
+    processor = VideoProcessor.objects.create(
+        type=processor_type,
+        parking_site=site,
+        stream_url='rtsp://example.com/some_rtsp_stream/',
+        is_active=True,
+    )
+
+    return processor_type, processor
 
 
 class ParkingLotsTestCase(APITestCase):
@@ -16,15 +32,18 @@ class ParkingLotsTestCase(APITestCase):
             cameras_number=1,
             is_free=True,
         )
+        _, proc = init_video_processor(site)
         lot1 = ParkingLot.objects.create(
             coordinates=[1, 1],
             parking_site=site,
+            video_processor=proc,
             is_occupied=False,
             is_for_disabled=False,
         )
         lot2 = ParkingLot.objects.create(
             coordinates=[2, 2],
             parking_site=site,
+            video_processor=proc,
             is_occupied=True,
             is_for_disabled=True,
         )
@@ -47,18 +66,21 @@ class ParkingLotsTestCase(APITestCase):
         site = ParkingSite.objects.create(
             address='parking-site-1', lots_number=10, cameras_number=1, is_free=True
         )
+        _, proc = init_video_processor(site)
 
         lots = [
             {
                 'coordinates': [1, 1],
                 'is_occupied': False,
                 'parking_site_id': site.id,
+                'video_processor_id': proc.id,
                 'is_for_disabled': False,
             },
             {
                 'coordinates': [2, 2],
                 'is_occupied': True,
                 'parking_site_id': site.id,
+                'video_processor_id': proc.id,
                 'is_for_disabled': True,
             },
         ]
@@ -104,9 +126,11 @@ class ParkingLotsTestCase(APITestCase):
         site = ParkingSite.objects.create(
             address='parking-site-1', lots_number=10, cameras_number=1, is_free=True
         )
+        _, proc = init_video_processor(site)
         lot = ParkingLot.objects.create(
             coordinates=[1, 1],
             parking_site=site,
+            video_processor=proc,
             is_occupied=False,
             is_for_disabled=False,
         )
@@ -138,9 +162,11 @@ class ParkingLotsTestCase(APITestCase):
             cameras_number=2,
             is_free=False,
         )
+        _, proc1 = init_video_processor(site1)
         lot = ParkingLot.objects.create(
             coordinates=[1, 1],
             parking_site=site1,
+            video_processor=proc1,
             is_occupied=False,
             is_for_disabled=False,
         )
@@ -161,9 +187,11 @@ class ParkingLotsTestCase(APITestCase):
             cameras_number=1,
             is_free=True,
         )
+        _, proc = init_video_processor(site)
         lot = ParkingLot.objects.create(
             coordinates=[1, 1],
             parking_site=site,
+            video_processor=proc,
             is_occupied=False,
             is_for_disabled=False,
         )
@@ -171,6 +199,7 @@ class ParkingLotsTestCase(APITestCase):
             'coordinates': [2, 2],
             'is_occupied': True,
             'parking_site_id': site.id,
+            'video_processor_id': proc.id,
             'is_for_disabled': True,
         }
 
@@ -209,9 +238,11 @@ class ParkingLotsTestCase(APITestCase):
             cameras_number=2,
             is_free=False,
         )
+        _, proc1 = init_video_processor(site1)
         lot = ParkingLot.objects.create(
             coordinates=[1, 1],
             parking_site=site1,
+            video_processor=proc1,
             is_occupied=False,
             is_for_disabled=False,
         )
@@ -237,11 +268,12 @@ class ParkingLotsTestCase(APITestCase):
             lots_number=10,
             cameras_number=1,
             is_free=True,
-
         )
+        _, proc = init_video_processor(site)
         lot = ParkingLot.objects.create(
             coordinates=[1, 1],
             parking_site=site,
+            video_processor=proc,
             is_occupied=False,
             is_for_disabled=False,
         )
@@ -266,9 +298,11 @@ class ParkingLotsTestCase(APITestCase):
             cameras_number=1,
             is_free=True,
         )
+        _, proc = init_video_processor(site)
         lot = ParkingLot.objects.create(
             coordinates=[1, 1],
             parking_site=site,
+            video_processor=proc,
             is_occupied=False,
             is_for_disabled=False,
         )
@@ -299,9 +333,11 @@ class ParkingLotsTestCase(APITestCase):
             cameras_number=2,
             is_free=False,
         )
+        _, proc1 = init_video_processor(site1)
         lot = ParkingLot.objects.create(
             coordinates=[1, 1],
             parking_site=site1,
+            video_processor=proc1,
             is_occupied=False,
             is_for_disabled=False,
         )
@@ -323,9 +359,11 @@ class ParkingLotsTestCase(APITestCase):
             cameras_number=1,
             is_free=True,
         )
+        _, proc = init_video_processor(site)
         lot = ParkingLot.objects.create(
             coordinates=[1, 1],
             parking_site=site,
+            video_processor=proc,
             is_occupied=False,
             is_for_disabled=True,
         )
@@ -345,9 +383,11 @@ class ParkingLotsTestCase(APITestCase):
             cameras_number=1,
             is_free=True,
         )
+        _, proc = init_video_processor(site)
         lot = ParkingLot.objects.create(
             coordinates=[1, 1],
             parking_site=site,
+            video_processor=proc,
             is_occupied=False,
             is_for_disabled=False,
         )
@@ -378,9 +418,11 @@ class ParkingLotsTestCase(APITestCase):
             cameras_number=2,
             is_free=False,
         )
+        _, proc1 = init_video_processor(site1)
         lot = ParkingLot.objects.create(
             coordinates=[1, 1],
             parking_site=site1,
+            video_processor=proc1,
             is_occupied=False,
             is_for_disabled=False,
         )
