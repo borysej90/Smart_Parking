@@ -38,17 +38,17 @@ window.onload = function () {
             lots[i].style.left = data[i].coordinates[0] + 'px';
             lots[i].style.top = data[i].coordinates[1] + 'px'; 
 
-            //check if slot for disabled persons 
+            //check if lot for disabled persons 
             if (data[i].is_for_disabled == false) {
-                lots[i].className="slot";
+                lots[i].className="lot";
             }
             else{
-                //img for slots for_disabled persons
+                //img for lots for_disabled persons
                 img = document.createElement("img"); 
                 img.src = "images/logo_black.png";
                 img.className = "img_prop";
 
-                lots[i].className="slot_for_disabled";
+                lots[i].className="lot_for_disabled";
                 lots[i].appendChild(img);
             }     
         }
