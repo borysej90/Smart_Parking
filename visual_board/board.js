@@ -1,123 +1,93 @@
-//test data
-data = [
-    {id: 1, x_pos: 200, y_pos: 200, for_disabled: false, is_ocupied: true},
-    {id: 2, x_pos: 200, y_pos: 240, for_disabled: false, is_ocupied: false},
-    {id: 3, x_pos: 200, y_pos: 280, for_disabled: false, is_ocupied: false},
-    //
-    {id: 4, x_pos: 265, y_pos: 200, for_disabled: false, is_ocupied: false},
-    {id: 5, x_pos: 265, y_pos: 240, for_disabled: false, is_ocupied: true},
-    {id: 6, x_pos: 265, y_pos: 280, for_disabled: false, is_ocupied: false},
-    {id: 7, x_pos: 265, y_pos: 320, for_disabled: true, is_ocupied: true},
-    ////
-    {id: 8, x_pos: 450, y_pos: 200, for_disabled: true, is_ocupied: true},
-    {id: 9, x_pos: 450, y_pos: 260, for_disabled: true, is_ocupied: false},
-    {id: 10, x_pos: 450, y_pos: 320, for_disabled: true, is_ocupied: false},
-    {id: 11, x_pos: 450, y_pos: 380, for_disabled: true, is_ocupied: false},
-    {id: 12, x_pos: 450, y_pos: 440, for_disabled: false, is_ocupied: false},
-    {id: 13, x_pos: 450, y_pos: 480, for_disabled: false, is_ocupied: true},
-    {id: 14, x_pos: 450, y_pos: 520, for_disabled: false, is_ocupied: true},
-    //
-    {id: 15, x_pos: 515, y_pos: 200, for_disabled: true, is_ocupied: false},
-    {id: 16, x_pos: 515, y_pos: 260, for_disabled: true, is_ocupied: true}  ,
-    {id: 17, x_pos: 515, y_pos: 320, for_disabled: true, is_ocupied: false},
-    {id: 18, x_pos: 515, y_pos: 380, for_disabled: true, is_ocupied: true},
-    {id: 19, x_pos: 515, y_pos: 440, for_disabled: false, is_ocupied: false},
-    {id: 20, x_pos: 515, y_pos: 480, for_disabled: false, is_ocupied: true},
-    {id: 21, x_pos: 515, y_pos: 520, for_disabled: false, is_ocupied: false},
-    ////
-    {id: 22, x_pos: 700, y_pos: 200, for_disabled: false, is_ocupied: false},
-    {id: 23, x_pos: 700, y_pos: 240, for_disabled: false, is_ocupied: true},
-    {id: 24, x_pos: 700, y_pos: 280, for_disabled: false, is_ocupied: true},
-    {id: 25, x_pos: 700, y_pos: 320, for_disabled: false, is_ocupied: true},
-    {id: 26, x_pos: 700, y_pos: 360, for_disabled: false, is_ocupied: false},
-    {id: 27, x_pos: 700, y_pos: 400, for_disabled: false, is_ocupied: false},
-    {id: 28, x_pos: 700, y_pos: 440, for_disabled: false, is_ocupied: false},
-    {id: 29, x_pos: 700, y_pos: 480, for_disabled: false, is_ocupied: false},
-    {id: 30, x_pos: 700, y_pos: 520, for_disabled: false, is_ocupied: true},
-    //
-    {id: 31, x_pos: 765, y_pos: 200, for_disabled: false, is_ocupied: false},
-    {id: 32, x_pos: 765, y_pos: 240, for_disabled: false, is_ocupied: true},
-    {id: 33, x_pos: 765, y_pos: 280, for_disabled: false, is_ocupied: false},
-    {id: 34, x_pos: 765, y_pos: 320, for_disabled: false, is_ocupied: false},
-    {id: 35, x_pos: 765, y_pos: 360, for_disabled: false, is_ocupied: true},
-    {id: 36, x_pos: 765, y_pos: 400, for_disabled: false, is_ocupied: false},
-    {id: 37, x_pos: 765, y_pos: 440, for_disabled: false, is_ocupied: false},
-    {id: 38, x_pos: 765, y_pos: 480, for_disabled: false, is_ocupied: true},
-    {id: 39, x_pos: 765, y_pos: 520, for_disabled: false, is_ocupied: false},
-    ////
-    {id: 40, x_pos: 950, y_pos: 200, for_disabled: false, is_ocupied: false},
-    {id: 41, x_pos: 950, y_pos: 240, for_disabled: false, is_ocupied: true},
-    {id: 42, x_pos: 950, y_pos: 280, for_disabled: false, is_ocupied: false},
-    {id: 43, x_pos: 950, y_pos: 320, for_disabled: false, is_ocupied: true},
-    {id: 44, x_pos: 950, y_pos: 360, for_disabled: false, is_ocupied: false},
-    {id: 45, x_pos: 950, y_pos: 400, for_disabled: false, is_ocupied: false},
-    {id: 46, x_pos: 950, y_pos: 440, for_disabled: false, is_ocupied: false},
-    {id: 47, x_pos: 950, y_pos: 480, for_disabled: false, is_ocupied: false},
-    {id: 48, x_pos: 950, y_pos: 520, for_disabled: false, is_ocupied: true},
-    //
-    {id: 49, x_pos: 1015, y_pos: 200, for_disabled: false, is_ocupied: false},
-    {id: 50, x_pos: 1015, y_pos: 240, for_disabled: false, is_ocupied: true},
-    {id: 51, x_pos: 1015, y_pos: 280, for_disabled: false, is_ocupied: true},
-    {id: 52, x_pos: 1015, y_pos: 320, for_disabled: false, is_ocupied: true},
-    {id: 53, x_pos: 1015, y_pos: 360, for_disabled: false, is_ocupied: true},
-    {id: 54, x_pos: 1015, y_pos: 400, for_disabled: false, is_ocupied: true},
-    {id: 55, x_pos: 1015, y_pos: 440, for_disabled: false, is_ocupied: false},
-    {id: 56, x_pos: 1015, y_pos: 480, for_disabled: false, is_ocupied: true},
-    {id: 57, x_pos: 1015, y_pos: 520, for_disabled: false, is_ocupied: false}, 
-]
-
 //create color variables 
 red = "#ff6666";
 green = "#77e196";
 
-//create array of divs/lots
+//create Url variable
+Url = "http://127.0.0.1:8000/api/sites/1/lots/";
+
+//create data and lots variables
+data = [];
 lots = [];
-lots.length = data.length;
 
-//set lots on their places
-window.onload = function() {
-    for (var i = 0; i < data.length; i++) {
+//set lots/divs on place
+window.onload = function () {
+    //create request
+    var xhttp = new XMLHttpRequest();
+    xhttp.responseType = "json";
 
-        //create div/lot
-        lots[i] = document.createElement("div");
+    xhttp.onreadystatechange = function() {
+    //check request status
+    if (this.readyState == 4 && this.status == 200) {
+        data = this.response;
         
-        //append div/lot to body
-        document.body.appendChild(lots[i]);
+        //create array of divs/lots
+        lots.length = data.length;
         
-        //set lot id
-        lots[i].setAttribute("id", data[i].id);
-        
-        //place div/lot on possition
-        lots[i].style.position = "absolute";
-        lots[i].style.left = data[i].x_pos + 'px';
-        lots[i].style.top = data[i].y_pos + 'px';
+        for (var i = 0; i < data.length; i++) {
+            //create div/lot
+            lots[i] = document.createElement("div");
+    
+            //append div/lot to body
+            document.body.appendChild(lots[i]);
+    
+            //set lot id
+            lots[i].setAttribute("id", data[i].id);
 
-        //check if lot for disabled persons 
-        if (data[i].for_disabled == false) {
-            lots[i].className="lot";
+            //place div/lot on possition
+            lots[i].style.position = "absolute";
+            lots[i].style.left = data[i].coordinates[0] + 'px';
+            lots[i].style.top = data[i].coordinates[1] + 'px'; 
+
+            //check if slot for disabled persons 
+            if (data[i].is_for_disabled == false) {
+                lots[i].className="slot";
+            }
+            else{
+                //img for slots for_disabled persons
+                img = document.createElement("img"); 
+                img.src = "images/logo_black.png";
+                img.className = "img_prop";
+
+                lots[i].className="slot_for_disabled";
+                lots[i].appendChild(img);
+            }     
         }
-        else{
-            //img for lots for_disabled persons
-            img = document.createElement("img"); 
-            img.src = "images/logo_black.png";
-            img.className = "img_prop";
+      }
+    };
+    //open request
+    xhttp.open("GET", Url, true);
+    //send request
+    xhttp.send();
+}
 
-            lots[i].className="lot_for_disabled";
-            lots[i].appendChild(img);
-        }
-    }
+
+//func for get request
+function getColor(theUrl)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.responseType = "json";
+    xmlHttp.open( "GET", Url); 
+    xmlHttp.send();
+    xmlHttp.onload = function() {        
+            data = xmlHttp.response;
+    };
 }
 
 function ChangeColor(x) {
+    //send request to see if something changed
+    getColor(Url);
+    
+    //change color if lot is occupied
     for (var i = 0; i < data.length; i++) {
-        if (data[i].is_ocupied == true) {
+        if (data[i].is_occupied == true) {
             lots[i].style.backgroundColor = red;
         }
         else{
             lots[i].style.backgroundColor = green;
         }
     }
+    
 }   
-
-//call ChangeColor function to see if something changed
+//call ChangeColor function every second
 setInterval(ChangeColor, 1000);
+

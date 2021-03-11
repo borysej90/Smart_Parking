@@ -1,7 +1,7 @@
 html{
     background-color: #000022;
 }
-.lot{
+.slot{
     background-color: #53ca7b;
     width: 60px;
     height: 35px;
@@ -9,7 +9,7 @@ html{
     transition: all 1s ease-in;
 }
 
-.lot_for_disabled{
+.slot_for_disabled{
     background-color: #53ca7b;
     width: 60px;
     height: 55px;
