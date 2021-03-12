@@ -85,3 +85,20 @@ def get_camera_stream_url(request, processor_id):
         return HttpResponseServerError()
 
     return Response({'url': url})
+
+
+@api_view(['POST'])
+def update_processors_parking_lots(request, processor_id):
+    lots = []
+    try:
+        for obj in request.data:
+            lot = get_object_or_404(ParkingLot, pk=obj['id'])
+            lot.is_occupied = obj['is_occupied']
+            lot.save()
+            lots.append(lot)
+    except KeyError as err:
+        return Response({err.args[0]: 'missing value'}, status=status.HTTP_400_BAD_REQUEST)
+
+    serializer = ParkingLotSerializer(lots, many=True)
+
+    return Response(serializer.data)

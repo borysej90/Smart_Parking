@@ -5,6 +5,7 @@ from . import views
 processors_urls = [
     path('map/', views.get_parking_lots_map, name='get-parking-lots-map'),
     path('rtsp/', views.get_camera_stream_url, name='get-camera-stream-url'),
+    path('lots/', views.update_processors_parking_lots, name='update-processors-parking-lots')
 ]
 
 sites_urls = [
