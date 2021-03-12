@@ -3,7 +3,7 @@ red = "#ff6666";
 green = "#77e196";
 
 //create Url variable
-Url = "http://127.0.0.1:8000/api/sites/1/lots/";
+Url = env.BASE_URL+"/api/sites/"+env.PARKING_SITE+"/lots/";
 
 //create data and lots variables
 data = [];
