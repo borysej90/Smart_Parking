@@ -1,10 +1,14 @@
+from django.http.response import HttpResponseServerError
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import ParkingLot, ParkingSite
 from .serializers import ParkingLotSerializer
+from .services.parking_lots import get_parking_map_by_processor_id
+from .services.video_processors import get_rtsp_url_by_processor_id
 
 
 class ParkingList(APIView):
@@ -64,3 +68,37 @@ class ParkingDetail(APIView):
 
         lot.delete()
         return Response("Parking lot has been deleted!")
+
+
+@api_view(['GET'])
+def get_parking_lots_map(request, processor_id):
+    parking_lots_map = get_parking_map_by_processor_id(processor_id)
+
+    return Response(parking_lots_map)
+
+
+@api_view(['GET'])
+def get_camera_stream_url(request, processor_id):
+    url = get_rtsp_url_by_processor_id(processor_id)
+
+    if url == '':
+        return HttpResponseServerError()
+
+    return Response({'url': url})
+
+
+@api_view(['POST'])
+def update_processors_parking_lots(request, processor_id):
+    lots = []
+    try:
+        for obj in request.data:
+            lot = get_object_or_404(ParkingLot, pk=obj['id'])
+            lot.is_occupied = obj['is_occupied']
+            lot.save()
+            lots.append(lot)
+    except KeyError as err:
+        return Response({err.args[0]: 'missing value'}, status=status.HTTP_400_BAD_REQUEST)
+
+    serializer = ParkingLotSerializer(lots, many=True)
+
+    return Response(serializer.data)
