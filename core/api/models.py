@@ -27,6 +27,8 @@ class VideoProcessor(models.Model):
 
 class ParkingLot(models.Model):
     id = models.AutoField(primary_key=True)
+    position_on_board = ArrayField(models.IntegerField())
+    shape_on_board = ArrayField(models.IntegerField())
     coordinates = ArrayField(models.IntegerField())
     parking_site = models.ForeignKey(ParkingSite, on_delete=models.CASCADE, related_name='lots')
     video_processor = models.ForeignKey(VideoProcessor, on_delete=models.CASCADE, related_name='lots')

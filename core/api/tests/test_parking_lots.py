@@ -34,6 +34,8 @@ class ParkingLotsTestCase(APITestCase):
         )
         _, proc = init_video_processor(site)
         lot1 = ParkingLot.objects.create(
+            position_on_board=[1, 1],
+            shape_on_board=[1, 1],
             coordinates=[1, 1],
             parking_site=site,
             video_processor=proc,
@@ -41,6 +43,8 @@ class ParkingLotsTestCase(APITestCase):
             is_for_disabled=False,
         )
         lot2 = ParkingLot.objects.create(
+            position_on_board=[2, 2],
+            shape_on_board=[2, 2],
             coordinates=[2, 2],
             parking_site=site,
             video_processor=proc,
@@ -70,6 +74,8 @@ class ParkingLotsTestCase(APITestCase):
 
         lots = [
             {
+                'position_on_board': [1, 1],
+                'shape_on_board': [1, 1],
                 'coordinates': [1, 1],
                 'is_occupied': False,
                 'parking_site_id': site.id,
@@ -77,6 +83,8 @@ class ParkingLotsTestCase(APITestCase):
                 'is_for_disabled': False,
             },
             {
+                'position_on_board': [2, 2],
+                'shape_on_board': [2, 2],
                 'coordinates': [2, 2],
                 'is_occupied': True,
                 'parking_site_id': site.id,
@@ -128,6 +136,8 @@ class ParkingLotsTestCase(APITestCase):
         )
         _, proc = init_video_processor(site)
         lot = ParkingLot.objects.create(
+            position_on_board=[1, 1],
+            shape_on_board=[1, 1],
             coordinates=[1, 1],
             parking_site=site,
             video_processor=proc,
@@ -164,6 +174,8 @@ class ParkingLotsTestCase(APITestCase):
         )
         _, proc1 = init_video_processor(site1)
         lot = ParkingLot.objects.create(
+            position_on_board=[1, 1],
+            shape_on_board=[1, 1],
             coordinates=[1, 1],
             parking_site=site1,
             video_processor=proc1,
@@ -189,6 +201,8 @@ class ParkingLotsTestCase(APITestCase):
         )
         _, proc = init_video_processor(site)
         lot = ParkingLot.objects.create(
+            position_on_board=[1, 1],
+            shape_on_board=[1, 1],
             coordinates=[1, 1],
             parking_site=site,
             video_processor=proc,
@@ -196,6 +210,8 @@ class ParkingLotsTestCase(APITestCase):
             is_for_disabled=False,
         )
         new_lot = {
+            'position_on_board': [2, 2],
+            'shape_on_board': [2, 2],
             'coordinates': [2, 2],
             'is_occupied': True,
             'parking_site_id': site.id,
@@ -240,6 +256,8 @@ class ParkingLotsTestCase(APITestCase):
         )
         _, proc1 = init_video_processor(site1)
         lot = ParkingLot.objects.create(
+            position_on_board=[1, 1],
+            shape_on_board=[1, 1],
             coordinates=[1, 1],
             parking_site=site1,
             video_processor=proc1,
@@ -271,6 +289,8 @@ class ParkingLotsTestCase(APITestCase):
         )
         _, proc = init_video_processor(site)
         lot = ParkingLot.objects.create(
+            position_on_board=[1, 1],
+            shape_on_board=[1, 1],
             coordinates=[1, 1],
             parking_site=site,
             video_processor=proc,
@@ -300,6 +320,8 @@ class ParkingLotsTestCase(APITestCase):
         )
         _, proc = init_video_processor(site)
         lot = ParkingLot.objects.create(
+            position_on_board=[1, 1],
+            shape_on_board=[1, 1],
             coordinates=[1, 1],
             parking_site=site,
             video_processor=proc,
@@ -335,6 +357,8 @@ class ParkingLotsTestCase(APITestCase):
         )
         _, proc1 = init_video_processor(site1)
         lot = ParkingLot.objects.create(
+            position_on_board=[1, 1],
+            shape_on_board=[1, 1],
             coordinates=[1, 1],
             parking_site=site1,
             video_processor=proc1,
@@ -361,6 +385,8 @@ class ParkingLotsTestCase(APITestCase):
         )
         _, proc = init_video_processor(site)
         lot = ParkingLot.objects.create(
+            position_on_board=[1, 1],
+            shape_on_board=[1, 1],
             coordinates=[1, 1],
             parking_site=site,
             video_processor=proc,
@@ -385,6 +411,8 @@ class ParkingLotsTestCase(APITestCase):
         )
         _, proc = init_video_processor(site)
         lot = ParkingLot.objects.create(
+            position_on_board=[1, 1],
+            shape_on_board=[1, 1],
             coordinates=[1, 1],
             parking_site=site,
             video_processor=proc,
@@ -420,6 +448,8 @@ class ParkingLotsTestCase(APITestCase):
         )
         _, proc1 = init_video_processor(site1)
         lot = ParkingLot.objects.create(
+            position_on_board=[1, 1],
+            shape_on_board=[1, 1],
             coordinates=[1, 1],
             parking_site=site1,
             video_processor=proc1,

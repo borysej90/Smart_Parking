@@ -61,6 +61,8 @@ class GetParkingLotsMapTests(APITestCase):
     def test_valid_response(self):
         site, proc_type, proc = init_models()
         lot = ParkingLot.objects.create(
+            position_on_board=[1, 1],
+            shape_on_board=[1, 1],
             coordinates=[1, 2, 3, 4],
             parking_site=site,
             video_processor=proc,
