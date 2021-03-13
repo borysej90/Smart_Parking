@@ -74,6 +74,8 @@ class ParkingLotsTestCase(APITestCase):
 
         lots = [
             {
+                'position_on_board': [1, 1],
+                'shape_on_board': [1, 1],
                 'coordinates': [1, 1],
                 'is_occupied': False,
                 'parking_site_id': site.id,
@@ -81,6 +83,8 @@ class ParkingLotsTestCase(APITestCase):
                 'is_for_disabled': False,
             },
             {
+                'position_on_board': [2, 2],
+                'shape_on_board': [2, 2],
                 'coordinates': [2, 2],
                 'is_occupied': True,
                 'parking_site_id': site.id,
