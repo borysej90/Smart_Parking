@@ -210,6 +210,8 @@ class ParkingLotsTestCase(APITestCase):
             is_for_disabled=False,
         )
         new_lot = {
+            'position_on_board': [2, 2],
+            'shape_on_board': [2, 2],
             'coordinates': [2, 2],
             'is_occupied': True,
             'parking_site_id': site.id,
