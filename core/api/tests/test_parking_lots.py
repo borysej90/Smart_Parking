@@ -174,216 +174,216 @@ class ParkingLotsTestCase(APITestCase):
             'Status code is not 400. Given lot was found on improper parking site.',
         )
 
-    # def test_detail_put(self):
-    #     site = ParkingSite.objects.create(
-    #         address='parking-site',
-    #         lots_number=10,
-    #         cameras_number=1,
-    #         is_free=True,
-    #     )
-    #     lot = ParkingLot.objects.create(
-    #         coordinates=[
-    #             1, 1,
-    #             10, 10,
-    #             100, 100,
-    #             1000, 1000
-    #         ],
-    #         parking_site=site,
-    #         is_occupied=False,
-    #         is_for_disabled=False,
-    #     )
-    #     new_lot = {
-    #         'coordinates': [{'x': 1, 'y': 1}, {'x': 2, 'y': 2}, {'x': 3, 'y': 3}, {'x': 4, 'y': 4}],
-    #         'is_occupied': True,
-    #         'parking_site_id': site.id,
-    #         'is_for_disabled': True,
-    #     }
-    #
-    #     url = reverse('parking-lot', args=[site.id, lot.id])
-    #     response = self.client.put(url, new_lot)
-    #
-    #     self.assertEqual(
-    #         response.status_code, status.HTTP_200_OK, 'Status code is not 200.'
-    #     )
-    #     self.assertListEqual(
-    #         response.data['coordinates'],
-    #         new_lot['coordinates'],
-    #         'Updated "coordinates" field is not equal to the requested one.',
-    #     )
-    #     self.assertEqual(
-    #         response.data['is_occupied'],
-    #         new_lot['is_occupied'],
-    #         'Updated "is_occupied" field is not equal to the requested ones.',
-    #     )
-    #     self.assertEqual(
-    #         response.data['parking_site_id'],
-    #         new_lot['parking_site_id'],
-    #         'Updated "parking_site_id" field, is not equal to the requested ones.',
-    #     )
+    def test_detail_put(self):
+        site = ParkingSite.objects.create(
+            address='parking-site',
+            lots_number=10,
+            cameras_number=1,
+            is_free=True,
+        )
+        lot = ParkingLot.objects.create(
+            coordinates=[
+                1, 1,
+                10, 10,
+                100, 100,
+                1000, 1000
+            ],
+            parking_site=site,
+            is_occupied=False,
+            is_for_disabled=False,
+        )
+        new_lot = {
+            'coordinates': [{'x': 1, 'y': 1}, {'x': 2, 'y': 2}, {'x': 3, 'y': 3}, {'x': 4, 'y': 4}],
+            'is_occupied': True,
+            'parking_site_id': site.id,
+            'is_for_disabled': True,
+        }
 
-    # def test_detail_put_with_another_parking_site(self):
-    #     site1 = ParkingSite.objects.create(
-    #         address='parking-site-1',
-    #         lots_number=10,
-    #         cameras_number=1,
-    #         is_free=True,
-    #     )
-    #     site2 = ParkingSite.objects.create(
-    #         address='parking-site-2',
-    #         lots_number=20,
-    #         cameras_number=2,
-    #         is_free=False,
-    #     )
-    #     lot = ParkingLot.objects.create(
-    #         coordinates=[
-    #             1, 1,
-    #             10, 10,
-    #             100, 100,
-    #             1000, 1000
-    #         ],
-    #         parking_site=site1,
-    #         is_occupied=False,
-    #         is_for_disabled=False,
-    #     )
-    #     new_lot = {
-    #         'coordinates': [{'x': 1, 'y': 1}, {'x': 2, 'y': 2}, {'x': 3, 'y': 3}, {'x': 4, 'y': 4}],
-    #         'is_occupied': True,
-    #         'parking_site_id': site1.id,
-    #         'is_for_disabled': True,
-    #     }
-    #
-    #     url = reverse('parking-lot', args=[site2.id, lot.id])
-    #     response = self.client.put(url, new_lot)
-    #
-    #     self.assertEqual(
-    #         response.status_code,
-    #         status.HTTP_400_BAD_REQUEST,
-    #         'Status code is not 400. Given lot was found on improper parking site.',
-    #     )
-    #
-    # def test_put_with_invalid_data(self):
-    #     site = ParkingSite.objects.create(
-    #         address='parking-site',
-    #         lots_number=10,
-    #         cameras_number=1,
-    #         is_free=True,
-    #
-    #     )
-    #     lot = ParkingLot.objects.create(
-    #         coordinates=[1, 1],
-    #         parking_site=site,
-    #         is_occupied=False,
-    #         is_for_disabled=False,
-    #     )
-    #     new_lot = {
-    #         'coordinates': 5,
-    #         'is_occupied': 'invalid boolean',
-    #         'parking_site_id': site.id,
-    #         'is_for_disabled': 123,
-    #     }
-    #
-    #     url = reverse('parking-lot', args=[site.id, lot.id])
-    #     response = self.client.put(url, new_lot)
-    #
-    #     self.assertEqual(
-    #         response.status_code, status.HTTP_400_BAD_REQUEST, 'Status code is not 400.'
-    #     )
-    #
-    # def test_detail_patch(self):
-    #     site = ParkingSite.objects.create(
-    #         address='parking-site',
-    #         lots_number=10,
-    #         cameras_number=1,
-    #         is_free=True,
-    #     )
-    #     lot = ParkingLot.objects.create(
-    #         coordinates=[
-    #             1, 1,
-    #             10, 10,
-    #             100, 100,
-    #             1000, 1000
-    #         ],
-    #         parking_site=site,
-    #         is_occupied=False,
-    #         is_for_disabled=False,
-    #     )
-    #     new_lot = {'is_occupied': True}
-    #
-    #     url = reverse('parking-lot', args=[site.id, lot.id])
-    #     response = self.client.patch(url, new_lot)
-    #
-    #     self.assertEqual(
-    #         response.status_code, status.HTTP_200_OK, 'Status code is not 200.'
-    #     )
-    #
-    #     self.assertEqual(
-    #         response.data['is_occupied'],
-    #         new_lot['is_occupied'],
-    #         'Patched "is_occupied" field is not equal to the requested one.',
-    #     )
-    #
-    # def test_detail_patch_with_another_parking_site(self):
-    #     site1 = ParkingSite.objects.create(
-    #         address='parking-site-1',
-    #         lots_number=10,
-    #         cameras_number=1,
-    #         is_free=True,
-    #     )
-    #     site2 = ParkingSite.objects.create(
-    #         address='parking-site-2',
-    #         lots_number=20,
-    #         cameras_number=2,
-    #         is_free=False,
-    #     )
-    #     lot = ParkingLot.objects.create(
-    #         coordinates=[
-    #             1, 1,
-    #             10, 10,
-    #             100, 100,
-    #             1000, 1000
-    #         ],
-    #         parking_site=site1,
-    #         is_occupied=False,
-    #         is_for_disabled=False,
-    #     )
-    #     new_lot = {'coordinates': [{'x': 1, 'y': 1}, {'x': 2, 'y': 2}, {'x': 3, 'y': 3}, {'x': 4, 'y': 4}]}
-    #
-    #     url = reverse('parking-lot', args=[site2.id, lot.id])
-    #     response = self.client.patch(url, new_lot)
-    #
-    #     self.assertEqual(
-    #         response.status_code,
-    #         status.HTTP_400_BAD_REQUEST,
-    #         'Status code is not 400. Given lot was found on improper parking site.',
-    #     )
-    #
-    # def test_patch_with_invalid_data(self):
-    #     site = ParkingSite.objects.create(
-    #         address='parking-site',
-    #         lots_number=10,
-    #         cameras_number=1,
-    #         is_free=True,
-    #     )
-    #     lot = ParkingLot.objects.create(
-    #         coordinates=[
-    #             1, 1,
-    #             10, 10,
-    #             100, 100,
-    #             1000, 1000
-    #         ],
-    #         parking_site=site,
-    #         is_occupied=False,
-    #         is_for_disabled=True,
-    #     )
-    #     new_lot = {'coordinates': True, 'something': [1, 2, 3]}
-    #
-    #     url = reverse('parking-lot', args=[site.id, lot.id])
-    #     response = self.client.patch(url, new_lot)
-    #
-    #     self.assertEqual(
-    #         response.status_code, status.HTTP_400_BAD_REQUEST, 'Status code is not 400.'
-    #     )
-    #
+        url = reverse('parking-lot', args=[site.id, lot.id])
+        response = self.client.put(url, json.dumps(new_lot), content_type='application/json')
+
+        self.assertEqual(
+            response.status_code, status.HTTP_200_OK, 'Status code is not 200.'
+        )
+        self.assertListEqual(
+            response.data['coordinates'],
+            new_lot['coordinates'],
+            'Updated "coordinates" field is not equal to the requested one.',
+        )
+        self.assertEqual(
+            response.data['is_occupied'],
+            new_lot['is_occupied'],
+            'Updated "is_occupied" field is not equal to the requested ones.',
+        )
+        self.assertEqual(
+            response.data['parking_site_id'],
+            new_lot['parking_site_id'],
+            'Updated "parking_site_id" field, is not equal to the requested ones.',
+        )
+
+    def test_detail_put_with_another_parking_site(self):
+        site1 = ParkingSite.objects.create(
+            address='parking-site-1',
+            lots_number=10,
+            cameras_number=1,
+            is_free=True,
+        )
+        site2 = ParkingSite.objects.create(
+            address='parking-site-2',
+            lots_number=20,
+            cameras_number=2,
+            is_free=False,
+        )
+        lot = ParkingLot.objects.create(
+            coordinates=[
+                1, 1,
+                10, 10,
+                100, 100,
+                1000, 1000
+            ],
+            parking_site=site1,
+            is_occupied=False,
+            is_for_disabled=False,
+        )
+        new_lot = {
+            'coordinates': [{'x': 1, 'y': 1}, {'x': 2, 'y': 2}, {'x': 3, 'y': 3}, {'x': 4, 'y': 4}],
+            'is_occupied': True,
+            'parking_site_id': site1.id,
+            'is_for_disabled': True,
+        }
+
+        url = reverse('parking-lot', args=[site2.id, lot.id])
+        response = self.client.put(url, json.dumps(new_lot), content_type='application/json')
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST,
+            'Status code is not 400. Given lot was found on improper parking site.',
+        )
+
+    def test_put_with_invalid_data(self):
+        site = ParkingSite.objects.create(
+            address='parking-site',
+            lots_number=10,
+            cameras_number=1,
+            is_free=True,
+
+        )
+        lot = ParkingLot.objects.create(
+            coordinates=[1, 1],
+            parking_site=site,
+            is_occupied=False,
+            is_for_disabled=False,
+        )
+        new_lot = {
+            'coordinates': 5,
+            'is_occupied': 'invalid boolean',
+            'parking_site_id': site.id,
+            'is_for_disabled': 123,
+        }
+
+        url = reverse('parking-lot', args=[site.id, lot.id])
+        response = self.client.put(url, json.dumps(new_lot), content_type='application/json')
+
+        self.assertEqual(
+            response.status_code, status.HTTP_400_BAD_REQUEST, 'Status code is not 400.'
+        )
+
+    def test_detail_patch(self):
+        site = ParkingSite.objects.create(
+            address='parking-site',
+            lots_number=10,
+            cameras_number=1,
+            is_free=True,
+        )
+        lot = ParkingLot.objects.create(
+            coordinates=[
+                1, 1,
+                10, 10,
+                100, 100,
+                1000, 1000
+            ],
+            parking_site=site,
+            is_occupied=False,
+            is_for_disabled=False,
+        )
+        new_lot = {'is_occupied': True}
+
+        url = reverse('parking-lot', args=[site.id, lot.id])
+        response = self.client.patch(url, json.dumps(new_lot), content_type='application/json')
+
+        self.assertEqual(
+            response.status_code, status.HTTP_200_OK, 'Status code is not 200.'
+        )
+
+        self.assertEqual(
+            response.data['is_occupied'],
+            new_lot['is_occupied'],
+            'Patched "is_occupied" field is not equal to the requested one.',
+        )
+
+    def test_detail_patch_with_another_parking_site(self):
+        site1 = ParkingSite.objects.create(
+            address='parking-site-1',
+            lots_number=10,
+            cameras_number=1,
+            is_free=True,
+        )
+        site2 = ParkingSite.objects.create(
+            address='parking-site-2',
+            lots_number=20,
+            cameras_number=2,
+            is_free=False,
+        )
+        lot = ParkingLot.objects.create(
+            coordinates=[
+                1, 1,
+                10, 10,
+                100, 100,
+                1000, 1000
+            ],
+            parking_site=site1,
+            is_occupied=False,
+            is_for_disabled=False,
+        )
+        new_lot = {'coordinates': [{'x': 1, 'y': 1}, {'x': 2, 'y': 2}, {'x': 3, 'y': 3}, {'x': 4, 'y': 4}]}
+
+        url = reverse('parking-lot', args=[site2.id, lot.id])
+        response = self.client.patch(url, json.dumps(new_lot), content_type='application/json')
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST,
+            'Status code is not 400. Given lot was found on improper parking site.',
+        )
+
+    def test_patch_with_invalid_data(self):
+        site = ParkingSite.objects.create(
+            address='parking-site',
+            lots_number=10,
+            cameras_number=1,
+            is_free=True,
+        )
+        lot = ParkingLot.objects.create(
+            coordinates=[
+                1, 1,
+                10, 10,
+                100, 100,
+                1000, 1000
+            ],
+            parking_site=site,
+            is_occupied=False,
+            is_for_disabled=True,
+        )
+        new_lot = {'coordinates': True, 'something': [1, 2, 3]}
+
+        url = reverse('parking-lot', args=[site.id, lot.id])
+        response = self.client.patch(url, json.dumps(new_lot), content_type='application/json')
+
+        self.assertEqual(
+            response.status_code, status.HTTP_400_BAD_REQUEST, 'Status code is not 400.'
+        )
+
     def test_detail_delete(self):
         site = ParkingSite.objects.create(
             address='parking-site',
