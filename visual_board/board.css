@@ -3,22 +3,18 @@ html{
 }
 .lot{
     background-color: #53ca7b;
-    width: 60px;
-    height: 35px;
     border-radius: 15%; 
     transition: all 1s ease-in;
 }
 
 .lot_for_disabled{
     background-color: #53ca7b;
-    width: 60px;
-    height: 55px;
     border-radius: 15%; 
     transition: all 1s ease-in;
 }
 .img_prop{
-    height: 30px;
-    width: 30px;
+    height: 55%;
+    width: 55%;
     margin: auto;
     margin-top: 13px;
     display: block;
