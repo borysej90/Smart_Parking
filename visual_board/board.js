@@ -35,8 +35,12 @@ window.onload = function () {
 
             //place div/lot on possition
             lots[i].style.position = "absolute";
-            lots[i].style.left = data[i].coordinates[0] + 'px';
-            lots[i].style.top = data[i].coordinates[1] + 'px'; 
+            lots[i].style.left = data[i].position_on_board[0] + 'px';
+            lots[i].style.top = data[i].position_on_board[1] + 'px'; 
+            
+            //set div/lot shape
+            lots[i].style.width = data[i].shape_on_board[0] + 'px';
+            lots[i].style.height = data[i].shape_on_board[1] + 'px';
 
             //check if lot for disabled persons 
             if (data[i].is_for_disabled == false) {
