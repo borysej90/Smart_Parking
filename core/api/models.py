@@ -17,8 +17,8 @@ class ParkingSite(models.Model):
     lots_number = models.IntegerField(blank=True)
     cameras_number = models.IntegerField(blank=True)
     is_free = models.BooleanField()
-    latitude = models.FloatField(min_value=-90, max_value=90)
-    longitude = models.FloatField(min_value=-180, max_value=180)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
 
 
 class VideoProcessor(models.Model):

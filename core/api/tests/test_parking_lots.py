@@ -183,8 +183,8 @@ class ParkingLotsTestCase(APITestCase):
             lots_number=20,
             cameras_number=2,
             is_free=False,
-            latitude = 76.2,
-            longitude = 132.4,
+            latitude=76.2,
+            longitude=132.4,
         )
         _, proc1 = init_video_processor(site1)
         lot = ParkingLot.objects.create(
