@@ -1,3 +1,4 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
@@ -11,10 +12,16 @@ class VideoProcessorType(models.Model):
 
 class ParkingSite(models.Model):
     id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    description = models.TextField(max_length=150)
     address = models.CharField(max_length=100)
     lots_number = models.IntegerField(blank=True)
     cameras_number = models.IntegerField(blank=True)
     is_free = models.BooleanField()
+    latitude = models.FloatField(validators=[MinValueValidator(-90, "Limit error"),
+                                             MaxValueValidator(90, "Limit error")])
+    longitude = models.FloatField(validators=[MinValueValidator(-180, "Limit error"),
+                                              MaxValueValidator(180, "Limit error")])
 
 
 class VideoProcessor(models.Model):
