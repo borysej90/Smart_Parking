@@ -9,10 +9,13 @@ INCORRECT_STATUS = 'Expected status code {} but got {}'
 
 def init_models():
     site = ParkingSite.objects.create(
+        name='some_name',
         address="Some street",
         lots_number=20,
         cameras_number=2,
         is_free=True,
+        latitude=25.2,
+        longitude=100.4,
     )
     processor_type = VideoProcessorType.objects.create(
         type_name='some_type',

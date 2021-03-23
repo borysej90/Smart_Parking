@@ -27,10 +27,14 @@ def init_video_processor(site: ParkingSite):
 class ParkingLotsTestCase(APITestCase):
     def test_get(self):
         site = ParkingSite.objects.create(
+            name='parking-site-1',
             address='parking-site-1',
             lots_number=10,
             cameras_number=1,
             is_free=True,
+            latitude=25.2,
+            longitude=100.4,
+
         )
         _, proc = init_video_processor(site)
         lot1 = ParkingLot.objects.create(
@@ -68,7 +72,8 @@ class ParkingLotsTestCase(APITestCase):
 
     def test_post(self):
         site = ParkingSite.objects.create(
-            address='parking-site-1', lots_number=10, cameras_number=1, is_free=True
+            name='parking-site-1', address='parking-site-1', lots_number=10, cameras_number=1, is_free=True,
+            latitude=25.2, longitude=100.4
         )
         _, proc = init_video_processor(site)
 
@@ -109,7 +114,8 @@ class ParkingLotsTestCase(APITestCase):
 
     def test_post_with_invalid_data(self):
         site = ParkingSite.objects.create(
-            address='parking-site-1', lots_number=10, cameras_number=1, is_free=True
+            name='parking-site-1', address='parking-site-1', lots_number=10, cameras_number=1, is_free=True,
+            latitude=25.2, longitude=100.4
         )
 
         lots = [
@@ -132,7 +138,8 @@ class ParkingLotsTestCase(APITestCase):
 
     def test_detail_get(self):
         site = ParkingSite.objects.create(
-            address='parking-site-1', lots_number=10, cameras_number=1, is_free=True
+            name='parking-site-1', address='parking-site-1', lots_number=10, cameras_number=1, is_free=True,
+            latitude=25.2, longitude=100.4
         )
         _, proc = init_video_processor(site)
         lot = ParkingLot.objects.create(
@@ -161,16 +168,23 @@ class ParkingLotsTestCase(APITestCase):
 
     def test_detail_get_with_another_parking_site(self):
         site1 = ParkingSite.objects.create(
+            name='parking-site-1',
             address='parking-site-1',
             lots_number=10,
             cameras_number=1,
             is_free=True,
+            latitude=25.2,
+            longitude=100.4,
+
         )
         site2 = ParkingSite.objects.create(
+            name='parking-site-2',
             address='parking-site-2',
             lots_number=20,
             cameras_number=2,
             is_free=False,
+            latitude = 76.2,
+            longitude = 132.4,
         )
         _, proc1 = init_video_processor(site1)
         lot = ParkingLot.objects.create(
@@ -194,10 +208,13 @@ class ParkingLotsTestCase(APITestCase):
 
     def test_detail_put(self):
         site = ParkingSite.objects.create(
+            name='parking-site',
             address='parking-site',
             lots_number=10,
             cameras_number=1,
             is_free=True,
+            latitude=21.2,
+            longitude=10.4,
         )
         _, proc = init_video_processor(site)
         lot = ParkingLot.objects.create(
@@ -243,16 +260,22 @@ class ParkingLotsTestCase(APITestCase):
 
     def test_detail_put_with_another_parking_site(self):
         site1 = ParkingSite.objects.create(
+            name='parking-site-1',
             address='parking-site-1',
             lots_number=10,
             cameras_number=1,
             is_free=True,
+            latitude=25.2,
+            longitude=100.4,
         )
         site2 = ParkingSite.objects.create(
+            name='parking-site-2',
             address='parking-site-2',
             lots_number=20,
             cameras_number=2,
             is_free=False,
+            latitude=76.2,
+            longitude=132.4,
         )
         _, proc1 = init_video_processor(site1)
         lot = ParkingLot.objects.create(
@@ -282,10 +305,13 @@ class ParkingLotsTestCase(APITestCase):
 
     def test_put_with_invalid_data(self):
         site = ParkingSite.objects.create(
+            name='parking-site',
             address='parking-site',
             lots_number=10,
             cameras_number=1,
             is_free=True,
+            latitude=21.2,
+            longitude=10.4,
         )
         _, proc = init_video_processor(site)
         lot = ParkingLot.objects.create(
@@ -313,10 +339,13 @@ class ParkingLotsTestCase(APITestCase):
 
     def test_detail_patch(self):
         site = ParkingSite.objects.create(
+            name='parking-site',
             address='parking-site',
             lots_number=10,
             cameras_number=1,
             is_free=True,
+            latitude=21.2,
+            longitude=10.4,
         )
         _, proc = init_video_processor(site)
         lot = ParkingLot.objects.create(
@@ -344,16 +373,22 @@ class ParkingLotsTestCase(APITestCase):
 
     def test_detail_patch_with_another_parking_site(self):
         site1 = ParkingSite.objects.create(
+            name='parking-site-1',
             address='parking-site-1',
             lots_number=10,
             cameras_number=1,
             is_free=True,
+            latitude=25.2,
+            longitude=100.4,
         )
         site2 = ParkingSite.objects.create(
+            name='parking-site-2',
             address='parking-site-2',
             lots_number=20,
             cameras_number=2,
             is_free=False,
+            latitude=76.2,
+            longitude=132.4,
         )
         _, proc1 = init_video_processor(site1)
         lot = ParkingLot.objects.create(
@@ -378,10 +413,13 @@ class ParkingLotsTestCase(APITestCase):
 
     def test_patch_with_invalid_data(self):
         site = ParkingSite.objects.create(
+            name='parking-site',
             address='parking-site',
             lots_number=10,
             cameras_number=1,
             is_free=True,
+            latitude=21.2,
+            longitude=10.4,
         )
         _, proc = init_video_processor(site)
         lot = ParkingLot.objects.create(
@@ -404,10 +442,13 @@ class ParkingLotsTestCase(APITestCase):
 
     def test_detail_delete(self):
         site = ParkingSite.objects.create(
+            name='parking-site',
             address='parking-site',
             lots_number=10,
             cameras_number=1,
             is_free=True,
+            latitude=21.2,
+            longitude=10.4,
         )
         _, proc = init_video_processor(site)
         lot = ParkingLot.objects.create(
@@ -435,16 +476,22 @@ class ParkingLotsTestCase(APITestCase):
 
     def test_detail_delete_with_another_parking_site(self):
         site1 = ParkingSite.objects.create(
+            name='parking-site-1',
             address='parking-site-1',
             lots_number=10,
             cameras_number=1,
             is_free=True,
+            latitude=25.2,
+            longitude=100.4,
         )
         site2 = ParkingSite.objects.create(
+            name='parking-site-2',
             address='parking-site-2',
             lots_number=20,
             cameras_number=2,
             is_free=False,
+            latitude=76.2,
+            longitude=132.4,
         )
         _, proc1 = init_video_processor(site1)
         lot = ParkingLot.objects.create(
