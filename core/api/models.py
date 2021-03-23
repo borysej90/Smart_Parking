@@ -13,7 +13,7 @@ class VideoProcessorType(models.Model):
 class ParkingSite(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
-    description = models.CharField(max_length=200)
+    description = models.TextField(max_length=150)
     address = models.CharField(max_length=100)
     lots_number = models.IntegerField(blank=True)
     cameras_number = models.IntegerField(blank=True)
