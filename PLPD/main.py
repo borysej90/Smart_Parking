@@ -24,16 +24,10 @@ class PaymentDetector():
         # If it's not the time - sleep
         if (self.check_time - datetime.now()) > timedelta(seconds=0):
             time.sleep((self.check_time - datetime.now()).total_seconds())
-            print("Awakening")
-            # If it is time to check return True
-            if self.check_time <= datetime.now():
-                return True
-        elif self.check_time < datetime.now():
-                return True
+
 
 
     def check(self):
-        print("Checking")
         # Get info about lot
         response = requests.get("http://127.0.0.1:5000" + f"/parking/{self.street}/lot_number/{self.lot}").json()
         # Check if it was paid for
@@ -41,11 +35,9 @@ class PaymentDetector():
         if response['is_paid'] == False:
             # Do smth
             print(f"Site - {self.street}, lot - {self.lot} was not paid for")
-            return True
         else:
             # Do smth
             print(f"All good at site - {self.street}, lot - {self.lot}")
-            return False
 
 # List of Checker objects
 processes = []
@@ -55,11 +47,11 @@ def observer():
         while True:
             # Check if processes has any objects
             if len(processes) > 0:
-                if processes[0].sleeper():
-                    # Check if lot was paid for
-                    processes[0].check()
-                    processes.pop(0)
-                    print(processes)
+                processes[0].sleeper()
+                # Check if lot was paid for
+                processes[0].check()
+                processes.pop(0)
+
 
 
 
@@ -98,15 +90,14 @@ def main():
                                                 if (cache[street][i]['is_occupied'] == False) and (
                                                         data[i]['is_occupied'] == True):
                                                         # Create new instanse of Cheker and append it to list
-                                                        checker = PaymentDetector(street,lot,datetime.now() + timedelta(seconds=10))
+                                                        checker = PaymentDetector(street,lot,datetime.now() + timedelta(minutes=15))
                                                         processes.append(checker)
 
-                                                        print(processes)
+
                         cache[street] = data
                 else:
                         # Create new key-value pair and print
                         cache[street] = data
-                        print(cache)
 
 if __name__ == '__main__':
 
