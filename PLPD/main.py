@@ -6,7 +6,7 @@ import threading
 from datetime import datetime, timedelta
 
 
-class Checker():
+class PaymentDetector():
     """
             street - string
             lot - int
@@ -20,7 +20,7 @@ class Checker():
         self.check_time = check_time
 
     # Checks if it is time to check payment at specific parking lot
-    def time_checker(self):
+    def sleeper(self):
         # If it's not the time - sleep
         if (self.check_time - datetime.now()) > timedelta(seconds=0):
             time.sleep((self.check_time - datetime.now()).total_seconds())
@@ -28,7 +28,8 @@ class Checker():
             # If it is time to check return True
             if self.check_time <= datetime.now():
                 return True
-
+        elif self.check_time < datetime.now():
+                return True
 
 
     def check(self):
@@ -36,9 +37,10 @@ class Checker():
         # Get info about lot
         response = requests.get("http://127.0.0.1:5000" + f"/parking/{self.street}/lot_number/{self.lot}").json()
         # Check if it was paid for
+        # Note: If 'lot_number' was not found you will get error
         if response['is_paid'] == False:
             # Do smth
-            print(f"Pidoras detected on site - {self.street}, lot - {self.lot}")
+            print(f"Site - {self.street}, lot - {self.lot} was not paid for")
             return True
         else:
             # Do smth
@@ -48,14 +50,12 @@ class Checker():
 # List of Checker objects
 processes = []
 
-# NOTE!!!
-# This function does not work if we update 2 parking lots at the same time
-# (Set 2 parking lots 'is_occupied' from False to True and see what happends)
+# If we have any lots in 'processes' this function will
 def observer():
         while True:
             # Check if processes has any objects
             if len(processes) > 0:
-                if processes[0].time_checker():
+                if processes[0].sleeper():
                     # Check if lot was paid for
                     processes[0].check()
                     processes.pop(0)
@@ -98,7 +98,7 @@ def main():
                                                 if (cache[street][i]['is_occupied'] == False) and (
                                                         data[i]['is_occupied'] == True):
                                                         # Create new instanse of Cheker and append it to list
-                                                        checker = Checker(street,lot,datetime.now() + timedelta(seconds=2))
+                                                        checker = PaymentDetector(street,lot,datetime.now() + timedelta(seconds=10))
                                                         processes.append(checker)
 
                                                         print(processes)
