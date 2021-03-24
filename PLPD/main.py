@@ -1,73 +1,119 @@
-import signal
-import zmq
+import time
 import requests
-import asyncio
+import zmq
+import signal
+import threading
+from datetime import datetime, timedelta
 
 
-signal.signal(signal.SIGINT, signal.SIG_DFL)
-context = zmq.Context()
-# Create SUB socket and connect it
-socket = context.socket(zmq.SUB)
-socket.connect('tcp://localhost:5555')
-# Filter data
-socket.setsockopt(zmq.SUBSCRIBE, b'parking-')
+class Checker():
+    """
+            street - string
+            lot - int
+            check_time - datetime
 
-# Function that has to wait 15 min and then check if parking lot was paid for.
-# BUT IT DOES NOT WORK. WHY? I DON'T KNOW, MB I AM AN IDIOT, MB NOT
-async def find_paid(lot, street):
+            THIS CLASS IS USED TO CHECK IF LOT WAS PAID FOR AFTER 15 min
+    """
+    def __init__(self, street, lot, check_time):
+        self.street = street
+        self.lot = lot
+        self.check_time = check_time
 
-    await asyncio.sleep(10)
-    # Advaned debugging technique
-    print("Female dog")
-    # Get info about parking lot
-    response = requests.get("http://127.0.0.1:5000" + f"/parking/{street}/lot_number/{lot}").json()
-    # Check if it was paid for
-    if response['is_paid'] == False:
-        print(f"Pidoras detected on site - {street}, lot - {lot}")
-    else:
-        print(f"All good at site - {street}, lot - {lot}")
+    # Checks if it is time to check payment at specific parking lot
+    def time_checker(self):
+        # If it's not the time - sleep
+        if (self.check_time - datetime.now()) > timedelta(seconds=0):
+            time.sleep((self.check_time - datetime.now()).total_seconds())
+            print("Awakening")
+            # If it is time to check return True
+            if self.check_time <= datetime.now():
+                return True
 
 
-async def main():
 
-    cache = {}
-    tasks = []
-    while True:
-        # Receive title from PUB
-        topic = socket.recv()
-        # Receive data from PUB
-        data = socket.recv_pyobj()
-        # Extract street name for further usage
-        street = topic.decode("utf-8").split("parking-")[1]
-
-        lot = 0
-        # Check if we already have data about specified street
-        if street in cache:
-            #Check if new data has changes
-            if cache[street] != data:
-                #Find parking lot where changes are
-                for i in range(len(data)):
-                    if data[i] != cache[street][i]:
-                        # Store lot id for further usage
-                        lot = data[i]['id']
-
-                        #If "is_occupied" changes to True set timer to check if it will be paid in 15 min
-                        if (cache[street][i]['is_occupied'] == False) and (data[i]['is_occupied'] == True):
-                            print("Checking")
-                            # Call for async function THAT DOES NOT WORK
-                            tasks.append(asyncio.create_task(find_paid(lot, street)))
-                            await asyncio.gather(*tasks)
-
-            cache[street] = data
+    def check(self):
+        print("Checking")
+        # Get info about lot
+        response = requests.get("http://127.0.0.1:5000" + f"/parking/{self.street}/lot_number/{self.lot}").json()
+        # Check if it was paid for
+        if response['is_paid'] == False:
+            # Do smth
+            print(f"Pidoras detected on site - {self.street}, lot - {self.lot}")
+            return True
         else:
-            cache[street] = data
-            print(cache)
+            # Do smth
+            print(f"All good at site - {self.street}, lot - {self.lot}")
+            return False
+
+# List of Checker objects
+processes = []
+
+# NOTE!!!
+# This function does not work if we update 2 parking lots at the same time
+# (Set 2 parking lots 'is_occupied' from False to True and see what happends)
+def observer():
+        while True:
+            # Check if processes has any objects
+            if len(processes) > 0:
+                if processes[0].time_checker():
+                    # Check if lot was paid for
+                    processes[0].check()
+                    processes.pop(0)
+                    print(processes)
 
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(main())
-loop.close()
 
 
+def main():
 
+        context = zmq.Context()
+        # Set socket
+        socket = context.socket(zmq.SUB)
+        socket.connect('tcp://localhost:5555')
+        # Subsctibe to parking-  title to filter information
+        socket.setsockopt(zmq.SUBSCRIBE, b'parking-')
+        # Dictionary where all info from PUB goes; Key - street, value - data
+        cache = {}
+
+        while True:
+                # Receive topic and date
+                topic = socket.recv()
+                data = socket.recv_pyobj()
+                # Get parking site street
+                street = topic.decode("utf-8").split("parking-")[1]
+                lot = 0
+                # Check if we have specified street in cache
+                if street in cache:
+                        # Check if new data has changes
+                        if cache[street] != data:
+
+                                # Find parking lot where changes are
+                                for i in range(len(data)):
+                                        if data[i] != cache[street][i]:
+                                                # Set lot
+                                                lot = data[i]['id']
+
+                                                # If "is_occupied" changes to True set timer
+                                                # to check if it will be paid in 15 min
+                                                if (cache[street][i]['is_occupied'] == False) and (
+                                                        data[i]['is_occupied'] == True):
+                                                        # Create new instanse of Cheker and append it to list
+                                                        checker = Checker(street,lot,datetime.now() + timedelta(seconds=2))
+                                                        processes.append(checker)
+
+                                                        print(processes)
+                        cache[street] = data
+                else:
+                        # Create new key-value pair and print
+                        cache[street] = data
+                        print(cache)
+
+if __name__ == '__main__':
+
+        signal.signal(signal.SIGINT, signal.SIG_DFL)
+        main_thread = threading.Thread(target=main)
+        observer_thread = threading.Thread(target=observer)
+
+        main_thread.start()
+        observer_thread.start()
 

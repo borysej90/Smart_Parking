@@ -18,8 +18,8 @@ socket.bind('tcp://*:5555')
 """
 data = [
         {'id':1,'is_occupied':True},
-        {'id':2,'is_occupied':False},
-        {'id':3,'is_occupied':False},
+        {'id':2,'is_occupied':True},
+        {'id':3,'is_occupied':True},
         {'id':4,'is_occupied':True},
         {'id':5,'is_occupied':True},
 ]
