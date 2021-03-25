@@ -170,25 +170,15 @@ def processor(core_url, processor_id, frame_lock, parking_map):
 
 if __name__ == '__main__':
 
-    # Parse input arguments
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument('-i', '--processor_id', type=str,
-                        help='Video Processor Id', required=True)
-    parser.add_argument('-u', '--core_url', type=str,
-                        help='URL Address of Core endpoint', required=True)
-
-    args = parser.parse_args()
-
-    processor_id = args.processor_id
-    core_url = args.core_url
+    processor_id = os.environ['PROCESSOR_ID']
+    core_url = os.environ['CORE_URL']
 
     # Get parking map
-    response = requests.get(f'{core_url}/api/processors/{processor_id}/map')
+    response = requests.get(f'{core_url}/api/processors/{processor_id}/map/')
     parking_map = response.json()
 
     # Get rtsp stream url
-    response = requests.get(f'{core_url}/api/processors/{processor_id}/rtsp')
+    response = requests.get(f'{core_url}/api/processors/{processor_id}/rtsp/')
     rtsp_url = response.json()['url']
 
     global curr_frame
