@@ -9,8 +9,8 @@ processors_urls = [
 ]
 
 sites_urls = [
-    path('', views.ParkingSiteAPI.as_view({'get': 'list', 'post': 'create'}), name='parking-sites'),
-    path('<int:pk>/', views.ParkingSiteAPI.as_view({'get': 'retrieve',
+    path('', views.ParkingSiteViewSet.as_view({'get': 'list', 'post': 'create'}), name='parking-sites'),
+    path('<int:pk>/', views.ParkingSiteViewSet.as_view({'get': 'retrieve',
                                                     'put': 'update',
                                                     'patch': 'partial_update',
                                                     'delete': 'destroy'}), name='parking-site'),

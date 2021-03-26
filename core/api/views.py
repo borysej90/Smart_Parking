@@ -12,7 +12,7 @@ from .services.parking_lots import get_parking_map_by_processor_id
 from .services.video_processors import get_rtsp_url_by_processor_id
 
 
-class ParkingSiteAPI(viewsets.ModelViewSet):
+class ParkingSiteViewSet(viewsets.ModelViewSet):
     serializer_class = ParkingSiteSerializer
     queryset = ParkingSite.objects.all()
 
