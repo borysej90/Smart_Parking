@@ -9,11 +9,20 @@ processors_urls = [
 ]
 
 sites_urls = [
-    path('lots/', views.ParkingList.as_view(), name='parking-lots'),
-    path('lots/<int:pk>/', views.ParkingDetail.as_view(), name='parking-lot'),
+    path('', views.ParkingSiteAPI.as_view({'get': 'list', 'post': 'create'}), name='parking-sites'),
+    path('<int:pk>/', views.ParkingSiteAPI.as_view({'get': 'retrieve',
+                                                    'put': 'update',
+                                                    'patch': 'partial_update',
+                                                    'delete': 'destroy'}), name='parking-site'),
+]
+
+lots_urls = [
+    path('', views.ParkingList.as_view(), name='parking-lots'),
+    path('<int:pk>/', views.ParkingDetail.as_view(), name='parking-lot'),
 ]
 
 urlpatterns = [
-    path('sites/<int:site_id>/', include(sites_urls)),
+    path('sites/', include(sites_urls)),
+    path('sites/<int:site_id>/lots/', include(lots_urls)),
     path('processors/<int:processor_id>/', include(processors_urls)),
 ]

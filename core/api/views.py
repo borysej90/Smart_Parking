@@ -1,14 +1,20 @@
 from django.http.response import HttpResponseServerError
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import ParkingLot, ParkingSite
-from .serializers import ParkingLotSerializer
+from .serializers import ParkingLotSerializer, ParkingSiteSerializer
 from .services.parking_lots import get_parking_map_by_processor_id
 from .services.video_processors import get_rtsp_url_by_processor_id
+
+
+class ParkingSiteAPI(viewsets.ModelViewSet):
+    serializer_class = ParkingSiteSerializer
+    queryset = ParkingSite.objects.all()
 
 
 class ParkingList(APIView):
