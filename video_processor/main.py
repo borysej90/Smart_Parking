@@ -76,21 +76,50 @@ def receiver(stream_url, frame_lock, tts=60):
     print(f'[INFO] <rec> Receiver started!')
     print(f'[INFO] <rec> Stream URL: {stream_url}')
 
-    # Initialize video stream capturing
-    cap = cv2.VideoCapture(stream_url)
-
-    while cap.isOpened():
+    err_cnt = 0
+    while True:
 
         # Save start time
         start_time = time.time()
+
+        # Initialize video stream capturing
+        cap = cv2.VideoCapture(stream_url, cv2.CAP_FFMPEG)           
+        
+        # Stop receiver if unable to open video stream
+        if not cap.isOpened():
+            print('[ERROR] <rcv> Unable to open video stream')
+
+            # If there is less than 5 errors in a row
+            if err_cnt < 5:
+                
+                # Increment error counter
+                err_cnt += 1
+
+                # Wait for 10 seconds
+                time.sleep(10)
+
+                # Try again
+                continue 
+
+            # Stop receiver if exceeded error limit
+            break
 
         # Read frame from video stream
         ret, frame = cap.read()
 
         # Stop loop if unable to get frame
         if not ret:
-            print('[ERROR] Unable to get frame!')
+            print('[ERROR] <rcv> Unable to get frame!')
+            
+            if err_cnt < 5:
+
+                err_cnt += 1
+                time.sleep(10)
+                continue
+
             break
+        else:
+            err_cnt = 0
 
         # Set current frame
         with frame_lock:
@@ -102,12 +131,6 @@ def receiver(stream_url, frame_lock, tts=60):
         wt = tts - (time.time() - start_time)
         if wt > 0:
             time.sleep(wt)
-
-        # Get id of latest frame
-        frameId = cap.get(cv2.CAP_PROP_POS_FRAMES)  # Current Frame ID
-
-        # Make sure next frame is last one
-        cap.set(1, frameId)
 
     print(f'[INFO] <rec> Receiver stopped!')
 
