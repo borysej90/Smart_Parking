@@ -2,7 +2,7 @@ import './LotItem.css';
 import React from "react";
 import Img from '../../images/logo_white.png';
 
-export default function LotsItem({lot}) {
+export default function LotItem({lot}) {
   const styles = {  
     marginLeft: lot.position_on_board[0], 
     marginTop: lot.position_on_board[1],
