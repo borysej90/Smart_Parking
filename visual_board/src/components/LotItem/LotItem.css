@@ -1,0 +1,18 @@
+.lot{
+    border-radius: 15%; 
+    position: absolute;
+}
+.red{
+    background-color:#E75C5C;
+}
+.green{
+    background-color:#53ca7b;
+}
+
+.img_prop{
+    height: 55%;
+    width: 65%;
+    margin: auto;
+    margin-top: 25%;
+    display: block;
+}
