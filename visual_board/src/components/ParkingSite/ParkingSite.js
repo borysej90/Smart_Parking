@@ -26,7 +26,7 @@ function ParkingSite() {
   }, []);
       
   return (
-    <div class="parkingSite">
+    <div className="parkingSite">
       { lots.map((lot, idx) => {
         return <LotItem lot={lot}
                 key={idx}
