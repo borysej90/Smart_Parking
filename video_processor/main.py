@@ -11,8 +11,6 @@ from PIL import Image
 MODEL_FILE = './model/deploy.prototxt'
 PRETRAINED = './model/snapshot_iter_6318.caffemodel'
 
-os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "rtsp_transport;0"
-
 
 def cut_out_lots(frame, parking_map):
     """
@@ -83,7 +81,7 @@ def receiver(stream_url, frame_lock, tts=60):
         start_time = time.time()
 
         # Initialize video stream capturing
-        cap = cv2.VideoCapture(stream_url, cv2.CAP_FFMPEG)           
+        cap = cv2.VideoCapture(stream_url)           
         
         # Stop receiver if unable to open video stream
         if not cap.isOpened():
