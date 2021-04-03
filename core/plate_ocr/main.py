@@ -5,7 +5,6 @@ import easyocr
 
 
 def recognize_plate(img):
-
     # Apply grayscale
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
