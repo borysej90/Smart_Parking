@@ -3,21 +3,10 @@ import numpy as np
 import imutils
 import easyocr
 
-class PlateRecognizer():
-    """
-        Plate number recognizer
-
-        USAGE:
-            Create class object and pass image to it using 'cv2.imread'
-            Call 'recognize_plate' method to get text from plate
-
-    """
-    def __init__(self, image):
-        self.img = image
-
-    def recognize_plate(self):
+def recognize_plate(self, img):
         # Apply grayscale
-        gray = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
+
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         # Apply filter and get edges
         bfilter = cv2.bilateralFilter(gray, 11, 17, 17)
@@ -36,10 +25,10 @@ class PlateRecognizer():
                 location = approx
                 break
 
-        # Apply mask to find license plate
+        # Apply mask to isolate license plate
         mask = np.zeros(gray.shape, np.uint8)
         new_image = cv2.drawContours(mask, [location], 0, 255, -1)
-        new_image = cv2.bitwise_and(self.img, self.img, mask=mask)
+        new_image = cv2.bitwise_and(img, img, mask=mask)
 
         # Find coordinates
         (x, y) = np.where(mask == 255)
