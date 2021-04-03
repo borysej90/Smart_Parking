@@ -18,12 +18,18 @@ def recognize_plate(self, img):
     contours = imutils.grab_contours(keypoints)
     contours = sorted(contours, key=cv2.contourArea, reverse=True)[:10]
 
-    # Find contours that represent square
+    # Find quadratic shape
+    location = None
     for contour in contours:
-        approx = cv2.approxPolyDP(contour, 10, True)ф
+        approx = cv2.approxPolyDP(contour, 10, True)
+        if len(approx) == 4:
+            location = approx
+            break
 
     # Apply mask to isolate license plate
     mask = np.zeros(gray.shape, np.uint8)
+    cv2.drawContours(mask, [location], 0, 255, -1)
+    cv2.bitwise_and(self.img, self.img, mask=mask)
 
     # Find coordinates
     (x, y) = np.where(mask == 255)
