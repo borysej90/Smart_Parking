@@ -4,15 +4,15 @@ import imutils
 import easyocr
 
 
-def recognize_plate(self, img):
-    # Apply grayscale
+def recognize_plate(img):
 
+    # Apply grayscale
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # Apply filter and get edges
     bfilter = cv2.bilateralFilter(gray, 11, 17, 17)
     edged = cv2.Canny(bfilter, 30, 200)
-
+g
     # Find contours
     keypoints = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     contours = imutils.grab_contours(keypoints)
@@ -29,7 +29,7 @@ def recognize_plate(self, img):
     # Apply mask to isolate license plate
     mask = np.zeros(gray.shape, np.uint8)
     cv2.drawContours(mask, [location], 0, 255, -1)
-    cv2.bitwise_and(self.img, self.img, mask=mask)
+    cv2.bitwise_and(img, img, mask=mask)
 
     # Find coordinates
     (x, y) = np.where(mask == 255)
