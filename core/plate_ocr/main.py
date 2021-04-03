@@ -12,7 +12,7 @@ def recognize_plate(img):
     # Apply filter and get edges
     bfilter = cv2.bilateralFilter(gray, 11, 17, 17)
     edged = cv2.Canny(bfilter, 30, 200)
-g
+
     # Find contours
     keypoints = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     contours = imutils.grab_contours(keypoints)
