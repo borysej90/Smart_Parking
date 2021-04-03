@@ -19,12 +19,8 @@ def recognize_plate(self, img):
     contours = sorted(contours, key=cv2.contourArea, reverse=True)[:10]
 
     # Find contours that represent square
-    location = None
     for contour in contours:
-        approx = cv2.approxPolyDP(contour, 10, True)
-        if len(approx) == 4:
-            location = approx
-            break
+        approx = cv2.approxPolyDP(contour, 10, True)ф
 
     # Apply mask to isolate license plate
     mask = np.zeros(gray.shape, np.uint8)
