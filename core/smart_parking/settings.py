@@ -14,6 +14,8 @@ from pathlib import Path
 
 from environs import Env
 
+from .utils import get_secret_value_from_file_or_env
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,7 +26,7 @@ env.read_env()
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.str('SECRET_KEY')
+SECRET_KEY = get_secret_value_from_file_or_env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
@@ -82,10 +84,10 @@ WSGI_APPLICATION = 'smart_parking.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': env.str('DB_NAME'),
+        'NAME': get_secret_value_from_file_or_env('DB_NAME'),
         'USER': env.str('DB_USER'),
-        'PASSWORD': env.str('DB_PASSWORD'),
-        'HOST': env.str('DB_HOST', default='localhost'),
+        'PASSWORD': get_secret_value_from_file_or_env('DB_PASSWORD'),
+        'HOST': get_secret_value_from_file_or_env('DB_HOST'),
         'PORT': env.str('DB_PORT', default='5432'),
     }
 }

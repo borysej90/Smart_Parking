@@ -1,0 +1,46 @@
+services:
+  core:
+    image: eu.gcr.io/smartparking-308712/core
+    build: core/
+    ports:
+      - "8000:8000"
+    environment:
+      SECRET_KEY_FILE: /run/secrets/secret_key
+      DB_USER: ${DB_USER}
+      DB_PASSWORD_FILE: /run/secrets/db_password
+      DB_HOST_FILE: /run/secrets/db_host
+      DB_PORT: ${DB_PORT}
+      DB_NAME_FILE: /run/secrets/db_name
+    secrets:
+      - secret_key
+      - db_password
+      - db_name
+      - db_host
+  video_processor:
+    image: eu.gcr.io/smartparking-308712/video_processor
+    build: video_processor/
+    environment:
+      CORE_URL: http://core:8000
+      PROCESSOR_ID: ${PROCESSOR_ID}
+    depends_on:
+      - core
+  visual_board:
+    image: eu.gcr.io/smartparking-308712/visual_board
+    build: visual_board/
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_base_url: http://core:8000
+      REACT_APP_parking_site: ${PARKING_SITE_ID}
+    depends_on:
+      - core
+
+secrets:
+  secret_key:
+    file: ./secrets/secret_key
+  db_password:
+    file: ./secrets/db_password
+  db_name:
+    file: ./secrets/db_name
+  db_host:
+    file: ./secrets/db_host
