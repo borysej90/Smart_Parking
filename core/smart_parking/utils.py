@@ -2,6 +2,7 @@ from os import environ
 
 from environs import EnvError
 
+
 def get_secret_value_from_file_or_env(env_var_name: str, t: type = str):
     """
     The function check if environment variable with secret file location is passed.
