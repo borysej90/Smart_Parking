@@ -1,12 +1,13 @@
-import os
-import cv2
-import time
-import caffe
 import argparse
-import requests
-import threading
-import numpy as np
 import json
+import os
+import threading
+import time
+
+import caffe
+import cv2
+import numpy as np
+import requests
 from PIL import Image
 
 MODEL_FILE = './model/deploy.prototxt'
