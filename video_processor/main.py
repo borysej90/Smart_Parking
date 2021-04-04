@@ -6,6 +6,7 @@ import argparse
 import requests
 import threading
 import numpy as np
+import json
 from PIL import Image
 
 MODEL_FILE = './model/deploy.prototxt'
@@ -170,14 +171,14 @@ def processor(core_url, processor_id, frame_lock, parking_map):
 
                 states += [{
                     'id': id,
-                    'is_occupied': is_occupied(net, img_data)
+                    'is_occupied': bool(is_occupied(net, img_data))
                 }]
 
             print(f'[INFO] <prc> Parking State: {states}')
 
             # Submit new parking state to the Core
             requests.post(
-                f'{core_url}/api/processors/{processor_id}/lots/', data=states)
+                f'{core_url}/api/processors/{processor_id}/lots/', json=json.dumps(states))
 
             # Clear current frame
             with frame_lock:
@@ -201,6 +202,7 @@ if __name__ == '__main__':
     # Get rtsp stream url
     response = requests.get(f'{core_url}/api/processors/{processor_id}/rtsp/')
     rtsp_url = response.json()['url']
+    print(rtsp_url)
 
     global curr_frame
     curr_frame = None
