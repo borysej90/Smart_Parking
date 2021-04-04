@@ -1,9 +1,15 @@
 services:
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
   core:
     image: eu.gcr.io/smartparking-308712/core
     build: core/
-    ports:
-      - "8000:8000"
+    # ports:
+    #   - "8000:8000"
     environment:
       SECRET_KEY_FILE: /run/secrets/secret_key
       DB_USER: ${DB_USER}
@@ -27,10 +33,10 @@ services:
   visual_board:
     image: eu.gcr.io/smartparking-308712/visual_board
     build: visual_board/
-    ports:
-      - "3000:3000"
+    # ports:
+    #   - "3000:3000"
     environment:
-      REACT_APP_base_url: http://core:8000
+      REACT_APP_base_url: http://localhost
       REACT_APP_parking_site: ${PARKING_SITE_ID}
     depends_on:
       - core
