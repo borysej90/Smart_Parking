@@ -512,3 +512,27 @@ class ParkingLotsTestCase(APITestCase):
             status.HTTP_400_BAD_REQUEST,
             'Status code is not 400. Given lot was found on improper parking site.',
         )
+
+    def test_validator_for_site(self):
+        site = [
+            {
+                'name': 'parking-site-1',
+                'address': 'parking-site-1',
+                'lots_number': 10,
+                'cameras_number': 1,
+                'is_free': True,
+                'latitude': 120,
+                'longitude': 578,
+            }
+        ]
+
+        url = reverse('parking-sites')
+        response = self.client.post(
+            url, json.dumps(site), content_type='application/json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST,
+            'Validator does not work'
+        )
