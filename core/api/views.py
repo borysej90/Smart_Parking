@@ -1,5 +1,6 @@
 from django.http.response import HttpResponseServerError
 from django.shortcuts import get_object_or_404
+import json
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
@@ -97,7 +98,7 @@ def get_camera_stream_url(request, processor_id):
 def update_processors_parking_lots(request, processor_id):
     lots = []
     try:
-        for obj in request.data:
+        for obj in json.loads(request.data):
             lot = get_object_or_404(ParkingLot, pk=obj['id'])
             lot.is_occupied = obj['is_occupied']
             lot.save()

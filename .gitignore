@@ -23,3 +23,6 @@ visual_board/env.js
 # IDE settings
 .idea/
 .vscode/
+
+# Secrets
+secrets/
