@@ -2,8 +2,6 @@ from os import environ
 
 from environs import EnvError
 
-from django.core.exceptions import ImproperlyConfigured
-
 def get_secret_value_from_file_or_env(env_var_name: str, t: type = str):
     """
     The function check if environment variable with secret file location is passed.
@@ -23,5 +21,5 @@ def get_secret_value_from_file_or_env(env_var_name: str, t: type = str):
 
     if value == '':
         raise EnvError(f'Environment variable "{env_var_name}" not set')
-    
+
     return t(value)
