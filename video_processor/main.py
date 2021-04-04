@@ -202,7 +202,6 @@ if __name__ == '__main__':
     # Get rtsp stream url
     response = requests.get(f'{core_url}/api/processors/{processor_id}/rtsp/')
     rtsp_url = response.json()['url']
-    print(rtsp_url)
 
     global curr_frame
     curr_frame = None
