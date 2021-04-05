@@ -1,7 +1,6 @@
 import './ParkingSite.css';
 import LotItem from '../LotItem/LotItem';
 import React, {useEffect} from 'react';
-import BackImg from "../../images/block_parking.png";
 import YouAreHere from '../YouAreHere/YouAreHere';
 
 function ParkingSite() {
@@ -33,8 +32,7 @@ function ParkingSite() {
                   />
       })}
       <YouAreHere />
-      <img className="background" src={BackImg} alt="back"/>
-  
+      <img className="background" src={process.env.PUBLIC_URL + `/images/parking${process.env.REACT_APP_parking_site}.png`} alt="background"/>
     </div>
   );
 }

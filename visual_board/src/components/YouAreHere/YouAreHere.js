@@ -1,9 +1,8 @@
 import './YouAreHere.css';
-import YouHere from "../../images/you_are_here.png"
 function YouAreHere() {
   return (
     <div className="youHere">
-        <img className="imgProp" src={YouHere} alt={YouHere}/>
+        <img className="imgProp" src={process.env.PUBLIC_URL + "/images/you_are_here.png"} alt="YouHere"/>
     </div>
   );
 }
