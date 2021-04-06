@@ -1,11 +1,13 @@
-import os
-import cv2
-import time
-import caffe
 import argparse
-import requests
+import json
+import os
 import threading
+import time
+
+import caffe
+import cv2
 import numpy as np
+import requests
 from PIL import Image
 
 MODEL_FILE = './model/deploy.prototxt'
@@ -170,14 +172,14 @@ def processor(core_url, processor_id, frame_lock, parking_map):
 
                 states += [{
                     'id': id,
-                    'is_occupied': is_occupied(net, img_data)
+                    'is_occupied': bool(is_occupied(net, img_data))
                 }]
 
             print(f'[INFO] <prc> Parking State: {states}')
 
             # Submit new parking state to the Core
             requests.post(
-                f'{core_url}/api/processors/{processor_id}/lots/', data=states)
+                f'{core_url}/api/processors/{processor_id}/lots/', json=json.dumps(states))
 
             # Clear current frame
             with frame_lock:
