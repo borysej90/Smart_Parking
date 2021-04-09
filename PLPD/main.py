@@ -14,6 +14,7 @@ class PaymentDetector():
 
             THIS CLASS IS USED TO CHECK IF LOT WAS PAID FOR AFTER 15 min
     """
+
     def __init__(self, street, lot, check_time):
         self.street = street
         self.lot = lot
@@ -24,8 +25,6 @@ class PaymentDetector():
         # If it's not the time - sleep
         if (self.check_time - datetime.now()) > timedelta(seconds=0):
             time.sleep((self.check_time - datetime.now()).total_seconds())
-
-
 
     def check(self):
         # Get info about lot
@@ -39,70 +38,66 @@ class PaymentDetector():
             # Do smth
             print(f"All good at site - {self.street}, lot - {self.lot}")
 
+
 # List of Checker objects
 processes = []
 
+
 # If we have any lots in 'processes' this function will
 def observer():
-        while True:
-            # Check if processes has any objects
-            if len(processes) > 0:
-                processes[0].sleeper()
-                # Check if lot was paid for
-                processes[0].check()
-                processes.pop(0)
-
-
-
+    while True:
+        # Check if processes has any objects
+        if len(processes) > 0:
+            processes[0].sleeper()
+            # Check if lot was paid for
+            processes[0].check()
+            processes.pop(0)
 
 
 def main():
+    context = zmq.Context()
+    # Set socket
+    socket = context.socket(zmq.SUB)
+    socket.connect('tcp://localhost:5556')
+    # Subsctibe to parking-  title to filter information
+    socket.setsockopt(zmq.SUBSCRIBE, b'parking-')
+    # Dictionary where all info from PUB goes; Key - street, value - data
+    cache = {}
 
-        context = zmq.Context()
-        # Set socket
-        socket = context.socket(zmq.SUB)
-        socket.connect('tcp://localhost:5556')
-        # Subsctibe to parking-  title to filter information
-        socket.setsockopt(zmq.SUBSCRIBE, b'parking-')
-        # Dictionary where all info from PUB goes; Key - street, value - data
-        cache = {}
+    while True:
+        # Receive topic and date
+        topic = socket.recv()
+        data = socket.recv_pyobj()
+        # Get parking site street
+        street = topic.decode("utf-8").split("parking-")[1]
+        lot = 0
+        # Check if we have specified street in cache
+        if street in cache:
+            # Check if new data has changes
+            if cache[street] != data:
+                # Find parking lot where changes are
+                for i in range(len(data)):
+                    if data[i] != cache[street][i]:
+                        # Set lot
+                        lot = data[i]['id']
+                        # If "is_occupied" changes to True set timer
+                        # to check if it will be paid in 15 min
+                        if (cache[street][i]['is_occupied'] == False) and (
+                                data[i]['is_occupied'] == True):
+                            # Create new instanse of Cheker and append it to list
+                            checker = PaymentDetector(street, lot, datetime.now() + timedelta(minutes=15))
+                            processes.append(checker)
 
-        while True:
-                # Receive topic and date
-                topic = socket.recv()
-                data = socket.recv_pyobj()
-                # Get parking site street
-                street = topic.decode("utf-8").split("parking-")[1]
-                lot = 0
-                # Check if we have specified street in cache
-                if street in cache:
-                        # Check if new data has changes
-                        if cache[street] != data:
-                                # Find parking lot where changes are
-                                for i in range(len(data)):
-                                        if data[i] != cache[street][i]:
-                                                # Set lot
-                                                lot = data[i]['id']
-                                                # If "is_occupied" changes to True set timer
-                                                # to check if it will be paid in 15 min
-                                                if (cache[street][i]['is_occupied'] == False) and (
-                                                        data[i]['is_occupied'] == True):
-                                                        # Create new instanse of Cheker and append it to list
-                                                        checker = PaymentDetector(street,lot,datetime.now() + timedelta(minutes=15))
-                                                        processes.append(checker)
+            cache[street] = data
+        else:
+            # Create new key-value pair and print
+            cache[street] = data
 
-
-                        cache[street] = data
-                else:
-                        # Create new key-value pair and print
-                        cache[street] = data
 
 if __name__ == '__main__':
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+    main_thread = threading.Thread(target=main)
+    observer_thread = threading.Thread(target=observer)
 
-        signal.signal(signal.SIGINT, signal.SIG_DFL)
-        main_thread = threading.Thread(target=main)
-        observer_thread = threading.Thread(target=observer)
-
-        main_thread.start()
-        observer_thread.start()
-
+    main_thread.start()
+    observer_thread.start()
