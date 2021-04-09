@@ -14,6 +14,7 @@ from .services.video_processors import get_rtsp_url_by_processor_id
 
 from events.publisher import Publisher
 
+
 class ParkingSiteViewSet(viewsets.ModelViewSet):
     serializer_class = ParkingSiteSerializer
     queryset = ParkingSite.objects.all()
