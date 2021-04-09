@@ -130,3 +130,5 @@ STATIC_URL = '/static/'
 
 # CORS Policy settings
 CORS_ORIGIN_ALLOW_ALL = True
+
+ZMQ_PUB_PORT = env.str("ZMQ_PUB_PORT")

@@ -32,7 +32,7 @@ class PaymentDetector():
         response = requests.get("http://127.0.0.1:5000" + f"/parking/{self.street}/lot_number/{self.lot}").json()
         # Check if it was paid for
         # Note: If 'lot_number' was not found you will get error
-        if response['is_paid'] == False:
+        if not response['is_paid']:
             # Do smth
             print(f"Site - {self.street}, lot - {self.lot} was not paid for")
         else:
@@ -61,7 +61,7 @@ def main():
         context = zmq.Context()
         # Set socket
         socket = context.socket(zmq.SUB)
-        socket.connect('tcp://localhost:5555')
+        socket.connect('tcp://localhost:5556')
         # Subsctibe to parking-  title to filter information
         socket.setsockopt(zmq.SUBSCRIBE, b'parking-')
         # Dictionary where all info from PUB goes; Key - street, value - data
@@ -78,13 +78,11 @@ def main():
                 if street in cache:
                         # Check if new data has changes
                         if cache[street] != data:
-
                                 # Find parking lot where changes are
                                 for i in range(len(data)):
                                         if data[i] != cache[street][i]:
                                                 # Set lot
                                                 lot = data[i]['id']
-
                                                 # If "is_occupied" changes to True set timer
                                                 # to check if it will be paid in 15 min
                                                 if (cache[street][i]['is_occupied'] == False) and (
