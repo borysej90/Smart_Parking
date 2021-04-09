@@ -7,10 +7,12 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import ParkingLot, ParkingSite
+from .models import ParkingLot, ParkingSite, VideoProcessor
 from .serializers import ParkingLotSerializer, ParkingSiteSerializer
 from .services.parking_lots import get_parking_map_by_processor_id
 from .services.video_processors import get_rtsp_url_by_processor_id
+
+from events.publisher import Publisher
 
 
 class ParkingSiteViewSet(viewsets.ModelViewSet):
@@ -107,5 +109,12 @@ def update_processors_parking_lots(request, processor_id):
         return Response({err.args[0]: 'missing value'}, status=status.HTTP_400_BAD_REQUEST)
 
     serializer = ParkingLotSerializer(lots, many=True)
+
+    video_processor = VideoProcessor.objects.get(id=processor_id)
+    site = ParkingSite.objects.get(id=video_processor.parking_site.id)
+    address = site.address
+
+    pub = Publisher()
+    pub.send_parking_lots(address, serializer.data)
 
     return Response(serializer.data)
