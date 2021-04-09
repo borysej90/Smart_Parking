@@ -6,6 +6,8 @@ COPY . /app
 WORKDIR /app
 
 RUN apk add --update \
+    libzmq \
+    zeromq-dev \
     postgresql-dev \
     musl-dev \
     gcc \
