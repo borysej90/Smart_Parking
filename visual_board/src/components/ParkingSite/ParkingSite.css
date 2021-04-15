@@ -1,9 +1,37 @@
-.parkingSite{
-    height: 100vh !important;
-    margin-left: 5%;
-    margin-right: 5%;
+body{
+    background-color: #282c34;    
+    height: 100vh;
+    width: 100vw;
 }
-.background{
-    width: 100%;
-    height: 100%;
+.parkingSite{
+    position: relative;
+    height: 100vh;
+    width: 90vw;
+    background-color: #282c34;
+    background-size: 100% 100%; 
+    background-repeat: no-repeat;
+    margin: auto;
+}
+
+@media screen and (max-width: 980px) {
+    .parkingSite {
+        height: 500px;
+        width: 700px; 
+        
+    }
+}
+
+
+@media screen and (max-width: 736px) {
+    .parkingSite {
+        height: 350px;
+        width: 500px;              
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .parkingSite {
+        height: 250px;
+        width: 400px;                      
+    }
 }

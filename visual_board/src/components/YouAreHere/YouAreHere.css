@@ -1,9 +1,9 @@
 .youHere{
-    width: 6.5%;
-    height: 16vh;
+    width: 8%;
+    height: 18%;
     position: absolute;
-    margin-left: 80%;
-    margin-top: 23vh;
+    left: 85%;
+    top: 22%;
     animation: leaves 1s ease-in-out infinite alternate;
 }
 .imgProp{

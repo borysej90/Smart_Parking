@@ -3,10 +3,10 @@ import React from "react";
 
 export default function LotItem({lot}) {
   const styles = {  
-    marginLeft: lot.position_on_board[0] / 10 + "%", 
-    marginTop: lot.position_on_board[1] / 10 + "vh",
-    height: lot.shape_on_board[1] / 10 + "%",
+    left: lot.position_on_board[0] / 10 + "%", 
+    top: lot.position_on_board[1] / 10 + "%",
     width: lot.shape_on_board[0] / 10 + "%",
+    height: lot.shape_on_board[1] / 10 + "%"
   }
   
   const classes = ["lot"];
