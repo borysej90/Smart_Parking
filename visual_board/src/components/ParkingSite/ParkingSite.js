@@ -20,21 +20,20 @@ function ParkingSite() {
       .then(lots => {
         setLots(lots)
       })
-    }, 1000);
+    }, 15000);//15 sec
     return () => clearInterval(interval);
   }, []);
       
   return (
-    <div className="parkingSite">
-      { lots.map((lot, idx) => {
-        return <LotItem lot={lot}
-                key={idx}
-                  />
-      })}
-      <YouAreHere />
-      <img className="background" src={process.env.PUBLIC_URL + `/images/parking${process.env.REACT_APP_parking_site}.png`} alt="background"/>
-    </div>
-  );
+        <div className="parkingSite" style={{backgroundImage:`url(${process.env.PUBLIC_URL}/images/parking${process.env.REACT_APP_parking_site}.png`}}>
+            {lots.map((lot, idx) => {
+                return <LotItem lot={lot}
+                            key={idx}
+                />
+            })}
+          <YouAreHere/>
+        </div>
+);
 }
   
 export default ParkingSite;
