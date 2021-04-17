@@ -5,6 +5,7 @@ channels:
   - main
 dependencies:
   - python=3
+  - nomkl
   - numpy
   - caffe
   - boost
