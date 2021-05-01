@@ -24,6 +24,21 @@ class ParkingSite(models.Model):
                                               MaxValueValidator(180, "Limit error")])
 
 
+class Citizen(models.Model):
+    number_plate = models.CharField(max_length=18)
+    last_seen = models.DateField(blank=True, null=True)
+    is_on_parking = models.BooleanField(blank=True, default=False)
+    total_paid_time = models.IntegerField(blank=True, default=0)
+
+
+class Acab(models.Model):
+    head = models.ForeignKey(Citizen, on_delete=models.CASCADE)
+    price_per_hour = models.FloatField(validators=[
+        MinValueValidator(0, "Minimal price error"),
+    ])
+    free_threshold = models.IntegerField()
+
+
 class VideoProcessor(models.Model):
     id = models.AutoField(primary_key=True)
     type = models.ForeignKey(VideoProcessorType, on_delete=models.CASCADE)
@@ -41,3 +56,4 @@ class ParkingLot(models.Model):
     video_processor = models.ForeignKey(VideoProcessor, on_delete=models.CASCADE, related_name='lots')
     is_occupied = models.BooleanField()
     is_for_disabled = models.BooleanField()
+    acab_id = models.ForeignKey(Acab, on_delete=models.CASCADE, blank=True, null=True)
