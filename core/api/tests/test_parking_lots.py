@@ -29,8 +29,6 @@ class ParkingLotsTestCase(APITestCase):
         site = ParkingSite.objects.create(
             name='parking-site-1',
             address='parking-site-1',
-            lots_number=10,
-            cameras_number=1,
             is_free=True,
             latitude=25.2,
             longitude=100.4,
@@ -56,7 +54,7 @@ class ParkingLotsTestCase(APITestCase):
             is_for_disabled=True,
         )
 
-        url = reverse('parking-lots', args=[site.id])
+        url = reverse('parking-lots-list', args=[site.id])
         response = self.client.get(url)
 
         serializer_data = ParkingLotSerializer([lot1, lot2], many=True).data
@@ -72,49 +70,33 @@ class ParkingLotsTestCase(APITestCase):
 
     def test_post(self):
         site = ParkingSite.objects.create(
-            name='parking-site-1', address='parking-site-1', lots_number=10, cameras_number=1, is_free=True,
+            name='parking-site-1', address='parking-site-1', is_free=True,
             latitude=25.2, longitude=100.4
         )
         _, proc = init_video_processor(site)
 
-        lots = [
-            {
-                'position_on_board': [1, 1],
-                'shape_on_board': [1, 1],
-                'coordinates': [1, 1],
-                'is_occupied': False,
-                'parking_site_id': site.id,
-                'video_processor_id': proc.id,
-                'is_for_disabled': False,
-            },
-            {
-                'position_on_board': [2, 2],
-                'shape_on_board': [2, 2],
-                'coordinates': [2, 2],
-                'is_occupied': True,
-                'parking_site_id': site.id,
-                'video_processor_id': proc.id,
-                'is_for_disabled': True,
-            },
-        ]
+        lot = {
+            'position_on_board': [1, 1],
+            'shape_on_board': [1, 1],
+            'coordinates': [1, 1],
+            'is_occupied': False,
+            'parking_site_id': site.id,
+            'video_processor_id': proc.id,
+            'is_for_disabled': False,
+        }
 
-        url = reverse('parking-lots', args=[site.id])
+        url = reverse('parking-lots-list', args=[site.id])
         response = self.client.post(
-            url, json.dumps(lots), content_type='application/json'
+            url, json.dumps(lot), content_type='application/json'
         )
 
         self.assertEqual(
-            response.status_code, status.HTTP_200_OK, 'Status code is not 200.'
-        )
-        self.assertEqual(
-            len(response.data),
-            len(lots),
-            "Got different quantity of requested items in response",
+            response.status_code, status.HTTP_201_CREATED, 'Status code is not 200.'
         )
 
     def test_post_with_invalid_data(self):
         site = ParkingSite.objects.create(
-            name='parking-site-1', address='parking-site-1', lots_number=10, cameras_number=1, is_free=True,
+            name='parking-site-1', address='parking-site-1', is_free=True,
             latitude=25.2, longitude=100.4
         )
 
@@ -127,7 +109,7 @@ class ParkingLotsTestCase(APITestCase):
             },
         ]
 
-        url = reverse('parking-lots', args=[site.id])
+        url = reverse('parking-lots-list', args=[site.id])
         response = self.client.post(
             url, json.dumps(lots), content_type='application/json'
         )
@@ -138,7 +120,7 @@ class ParkingLotsTestCase(APITestCase):
 
     def test_detail_get(self):
         site = ParkingSite.objects.create(
-            name='parking-site-1', address='parking-site-1', lots_number=10, cameras_number=1, is_free=True,
+            name='parking-site-1', address='parking-site-1', is_free=True,
             latitude=25.2, longitude=100.4
         )
         _, proc = init_video_processor(site)
@@ -152,7 +134,7 @@ class ParkingLotsTestCase(APITestCase):
             is_for_disabled=False,
         )
 
-        url = reverse('parking-lot', args=[site.id, lot.id])
+        url = reverse('parking-lots-detail', args=[site.id, lot.id])
         response = self.client.get(url)
 
         serializer_data = ParkingLotSerializer(lot).data
@@ -170,8 +152,6 @@ class ParkingLotsTestCase(APITestCase):
         site1 = ParkingSite.objects.create(
             name='parking-site-1',
             address='parking-site-1',
-            lots_number=10,
-            cameras_number=1,
             is_free=True,
             latitude=25.2,
             longitude=100.4,
@@ -180,8 +160,6 @@ class ParkingLotsTestCase(APITestCase):
         site2 = ParkingSite.objects.create(
             name='parking-site-2',
             address='parking-site-2',
-            lots_number=20,
-            cameras_number=2,
             is_free=False,
             latitude=76.2,
             longitude=132.4,
@@ -197,21 +175,19 @@ class ParkingLotsTestCase(APITestCase):
             is_for_disabled=False,
         )
 
-        url = reverse('parking-lot', args=[site2.id, lot.id])
+        url = reverse('parking-lots-detail', args=[site2.id, lot.id])
         response = self.client.get(url)
 
         self.assertEqual(
             response.status_code,
-            status.HTTP_400_BAD_REQUEST,
-            'Status code is not 400. Given lot was found on improper parking site.',
+            status.HTTP_404_NOT_FOUND,
+            'Status code is not 404. Given lot was found on improper parking site.',
         )
 
     def test_detail_put(self):
         site = ParkingSite.objects.create(
             name='parking-site',
             address='parking-site',
-            lots_number=10,
-            cameras_number=1,
             is_free=True,
             latitude=21.2,
             longitude=10.4,
@@ -236,7 +212,7 @@ class ParkingLotsTestCase(APITestCase):
             'is_for_disabled': True,
         }
 
-        url = reverse('parking-lot', args=[site.id, lot.id])
+        url = reverse('parking-lots-detail', args=[site.id, lot.id])
         response = self.client.put(url, new_lot)
 
         self.assertEqual(
@@ -262,8 +238,6 @@ class ParkingLotsTestCase(APITestCase):
         site1 = ParkingSite.objects.create(
             name='parking-site-1',
             address='parking-site-1',
-            lots_number=10,
-            cameras_number=1,
             is_free=True,
             latitude=25.2,
             longitude=100.4,
@@ -271,8 +245,6 @@ class ParkingLotsTestCase(APITestCase):
         site2 = ParkingSite.objects.create(
             name='parking-site-2',
             address='parking-site-2',
-            lots_number=20,
-            cameras_number=2,
             is_free=False,
             latitude=76.2,
             longitude=132.4,
@@ -294,21 +266,19 @@ class ParkingLotsTestCase(APITestCase):
             'is_for_disabled': True,
         }
 
-        url = reverse('parking-lot', args=[site2.id, lot.id])
+        url = reverse('parking-lots-detail', args=[site2.id, lot.id])
         response = self.client.put(url, new_lot)
 
         self.assertEqual(
             response.status_code,
-            status.HTTP_400_BAD_REQUEST,
-            'Status code is not 400. Given lot was found on improper parking site.',
+            status.HTTP_404_NOT_FOUND,
+            'Status code is not 404. Given lot was found on improper parking site.',
         )
 
     def test_put_with_invalid_data(self):
         site = ParkingSite.objects.create(
             name='parking-site',
             address='parking-site',
-            lots_number=10,
-            cameras_number=1,
             is_free=True,
             latitude=21.2,
             longitude=10.4,
@@ -330,7 +300,7 @@ class ParkingLotsTestCase(APITestCase):
             'is_for_disabled': 123,
         }
 
-        url = reverse('parking-lot', args=[site.id, lot.id])
+        url = reverse('parking-lots-detail', args=[site.id, lot.id])
         response = self.client.put(url, new_lot)
 
         self.assertEqual(
@@ -341,8 +311,6 @@ class ParkingLotsTestCase(APITestCase):
         site = ParkingSite.objects.create(
             name='parking-site',
             address='parking-site',
-            lots_number=10,
-            cameras_number=1,
             is_free=True,
             latitude=21.2,
             longitude=10.4,
@@ -359,7 +327,7 @@ class ParkingLotsTestCase(APITestCase):
         )
         new_lot = {'coordinates': [2, 2]}
 
-        url = reverse('parking-lot', args=[site.id, lot.id])
+        url = reverse('parking-lots-detail', args=[site.id, lot.id])
         response = self.client.patch(url, new_lot)
 
         self.assertEqual(
@@ -375,8 +343,6 @@ class ParkingLotsTestCase(APITestCase):
         site1 = ParkingSite.objects.create(
             name='parking-site-1',
             address='parking-site-1',
-            lots_number=10,
-            cameras_number=1,
             is_free=True,
             latitude=25.2,
             longitude=100.4,
@@ -384,8 +350,6 @@ class ParkingLotsTestCase(APITestCase):
         site2 = ParkingSite.objects.create(
             name='parking-site-2',
             address='parking-site-2',
-            lots_number=20,
-            cameras_number=2,
             is_free=False,
             latitude=76.2,
             longitude=132.4,
@@ -402,21 +366,19 @@ class ParkingLotsTestCase(APITestCase):
         )
         new_lot = {'coordinates': [2, 2]}
 
-        url = reverse('parking-lot', args=[site2.id, lot.id])
+        url = reverse('parking-lots-detail', args=[site2.id, lot.id])
         response = self.client.patch(url, new_lot)
 
         self.assertEqual(
             response.status_code,
-            status.HTTP_400_BAD_REQUEST,
-            'Status code is not 400. Given lot was found on improper parking site.',
+            status.HTTP_404_NOT_FOUND,
+            'Status code is not 404. Given lot was found on improper parking site.',
         )
 
     def test_patch_with_invalid_data(self):
         site = ParkingSite.objects.create(
             name='parking-site',
             address='parking-site',
-            lots_number=10,
-            cameras_number=1,
             is_free=True,
             latitude=21.2,
             longitude=10.4,
@@ -433,7 +395,7 @@ class ParkingLotsTestCase(APITestCase):
         )
         new_lot = {'coordinates': True, 'something': [1, 2, 3]}
 
-        url = reverse('parking-lot', args=[site.id, lot.id])
+        url = reverse('parking-lots-detail', args=[site.id, lot.id])
         response = self.client.patch(url, new_lot)
 
         self.assertEqual(
@@ -444,8 +406,6 @@ class ParkingLotsTestCase(APITestCase):
         site = ParkingSite.objects.create(
             name='parking-site',
             address='parking-site',
-            lots_number=10,
-            cameras_number=1,
             is_free=True,
             latitude=21.2,
             longitude=10.4,
@@ -461,12 +421,12 @@ class ParkingLotsTestCase(APITestCase):
             is_for_disabled=False,
         )
 
-        url = reverse('parking-lot', args=[site.id, lot.id])
+        url = reverse('parking-lots-detail', args=[site.id, lot.id])
         response = self.client.delete(url)
         deleted_lot = self.client.get(url)
 
         self.assertEqual(
-            response.status_code, status.HTTP_200_OK, 'Status code is not 200.'
+            response.status_code, status.HTTP_204_NO_CONTENT, 'Status code is not 200.'
         )
         self.assertEqual(
             deleted_lot.status_code,
@@ -478,8 +438,6 @@ class ParkingLotsTestCase(APITestCase):
         site1 = ParkingSite.objects.create(
             name='parking-site-1',
             address='parking-site-1',
-            lots_number=10,
-            cameras_number=1,
             is_free=True,
             latitude=25.2,
             longitude=100.4,
@@ -487,8 +445,6 @@ class ParkingLotsTestCase(APITestCase):
         site2 = ParkingSite.objects.create(
             name='parking-site-2',
             address='parking-site-2',
-            lots_number=20,
-            cameras_number=2,
             is_free=False,
             latitude=76.2,
             longitude=132.4,
@@ -504,13 +460,13 @@ class ParkingLotsTestCase(APITestCase):
             is_for_disabled=False,
         )
 
-        url = reverse('parking-lot', args=[site2.id, lot.id])
+        url = reverse('parking-lots-detail', args=[site2.id, lot.id])
         response = self.client.delete(url)
 
         self.assertEqual(
             response.status_code,
-            status.HTTP_400_BAD_REQUEST,
-            'Status code is not 400. Given lot was found on improper parking site.',
+            status.HTTP_404_NOT_FOUND,
+            'Status code is not 404. Given lot was found on improper parking site.',
         )
 
     def test_validator_for_site(self):
@@ -526,7 +482,7 @@ class ParkingLotsTestCase(APITestCase):
             }
         ]
 
-        url = reverse('parking-sites')
+        url = reverse('parking-sites-list')
         response = self.client.post(
             url, json.dumps(site), content_type='application/json'
         )

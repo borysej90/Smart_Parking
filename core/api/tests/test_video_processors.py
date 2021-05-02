@@ -11,8 +11,6 @@ def init_models():
     site = ParkingSite.objects.create(
         name='some_name',
         address="Some street",
-        lots_number=20,
-        cameras_number=2,
         is_free=True,
         latitude=25.2,
         longitude=100.4,
@@ -41,14 +39,8 @@ class GetParkingLotsMapTests(APITestCase):
 
         self.assertEqual(
             response.status_code,
-            status.HTTP_200_OK,
-            INCORRECT_STATUS.format(status.HTTP_200_OK, response.status_code)
-        )
-
-        self.assertEqual(
-            response.data,
-            [],
-            f'Expected empty list but got {response.data}'
+            status.HTTP_404_NOT_FOUND,
+            INCORRECT_STATUS.format(status.HTTP_404_NOT_FOUND, response.status_code)
         )
 
     def test_not_found(self):
