@@ -1,4 +1,6 @@
 from django.urls import include, path
+from rest_framework.routers import DefaultRouter
+from rest_framework_nested.routers import NestedDefaultRouter
 
 from . import views
 
@@ -8,21 +10,14 @@ processors_urls = [
     path('lots/', views.update_processors_parking_lots, name='update-processors-parking-lots')
 ]
 
-sites_urls = [
-    path('', views.ParkingSiteViewSet.as_view({'get': 'list', 'post': 'create'}), name='parking-sites'),
-    path('<int:pk>/', views.ParkingSiteViewSet.as_view({'get': 'retrieve',
-                                                        'put': 'update',
-                                                        'patch': 'partial_update',
-                                                        'delete': 'destroy'}), name='parking-site'),
-]
+sites_router = DefaultRouter()
+sites_router.register('sites', views.ParkingSiteViewSet, basename='parking-sites')
 
-lots_urls = [
-    path('', views.ParkingList.as_view(), name='parking-lots'),
-    path('<int:pk>/', views.ParkingDetail.as_view(), name='parking-lot'),
-]
+lots_router = NestedDefaultRouter(sites_router, 'sites', lookup='site')
+lots_router.register('lots', views.ParkingLotViewSet, basename='parking-lots')
 
 urlpatterns = [
-    path('sites/', include(sites_urls)),
-    path('sites/<int:site_id>/lots/', include(lots_urls)),
+    *sites_router.urls,
+    *lots_router.urls,
     path('processors/<int:processor_id>/', include(processors_urls)),
 ]

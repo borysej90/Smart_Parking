@@ -1,87 +1,42 @@
+import json
+
+from django.db.models import Count
 from django.http.response import HttpResponseServerError
 from django.shortcuts import get_object_or_404
-import json
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
+from events.publisher import Publisher
 from .models import ParkingLot, ParkingSite, VideoProcessor
 from .serializers import ParkingLotSerializer, ParkingSiteSerializer
 from .services.parking_lots import get_parking_map_by_processor_id
 from .services.video_processors import get_rtsp_url_by_processor_id
 
-from events.publisher import Publisher
-
 
 class ParkingSiteViewSet(viewsets.ModelViewSet):
     serializer_class = ParkingSiteSerializer
-    queryset = ParkingSite.objects.all()
+    queryset = ParkingSite.objects.annotate(lots_number=Count('lots'), cameras_number=Count('processors'))
+    lookup_field = 'id'
 
 
-class ParkingList(APIView):
-    def get(self, request, site_id, format=None):
-        _ = get_object_or_404(ParkingSite, pk=site_id)
-        lots = ParkingLot.objects.filter(parking_site=site_id)
-        serializer = ParkingLotSerializer(lots, many=True)
-        return Response(serializer.data)
+class ParkingLotViewSet(viewsets.ModelViewSet):
+    serializer_class = ParkingLotSerializer
 
-    def post(self, request, site_id, format=None):
-        serializer = ParkingLotSerializer(data=request.data, many=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ParkingDetail(APIView):
-    def get(self, request, site_id, pk, format=None):
-        lot = get_object_or_404(ParkingLot, pk=pk)
-
-        if lot.parking_site.id != site_id:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = ParkingLotSerializer(lot)
-        return Response(serializer.data)
-
-    def put(self, request, site_id, pk, format=None):
-        lot = get_object_or_404(ParkingLot, pk=pk)
-
-        if lot.parking_site.id != site_id:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = ParkingLotSerializer(lot, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def patch(self, request, site_id, pk, format=None):
-        lot = get_object_or_404(ParkingLot, pk=pk)
-
-        if lot.parking_site.id != site_id:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = ParkingLotSerializer(lot, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, site_id, pk, format=None):
-        lot = get_object_or_404(ParkingLot, pk=pk)
-
-        if lot.parking_site.id != site_id:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        lot.delete()
-        return Response("Parking lot has been deleted!")
+    def get_queryset(self):
+        queryset = ParkingLot.objects.filter(parking_site_id=self.kwargs['site_id'])
+        return queryset
 
 
 @api_view(['GET'])
 def get_parking_lots_map(request, processor_id):
     parking_lots_map = get_parking_map_by_processor_id(processor_id)
+    if len(parking_lots_map) < 1:
+        return Response(
+            {'message': 'no such video processor or parking map is empty'},
+            status=status.HTTP_404_NOT_FOUND,
+        )
 
     return Response(parking_lots_map)
 
@@ -89,7 +44,6 @@ def get_parking_lots_map(request, processor_id):
 @api_view(['GET'])
 def get_camera_stream_url(request, processor_id):
     url = get_rtsp_url_by_processor_id(processor_id)
-
     if url == '':
         return HttpResponseServerError()
 
@@ -110,9 +64,8 @@ def update_processors_parking_lots(request, processor_id):
 
     serializer = ParkingLotSerializer(lots, many=True)
 
-    video_processor = VideoProcessor.objects.get(id=processor_id)
-    site = ParkingSite.objects.get(id=video_processor.parking_site.id)
-    address = site.address
+    video_processor = VideoProcessor.objects.select_related('parking_site').values('parking_site__address').get(id=processor_id)
+    address = video_processor.parking_site.address
 
     pub = Publisher()
     pub.send_parking_lots(address, serializer.data)
