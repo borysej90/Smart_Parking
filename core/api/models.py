@@ -15,13 +15,15 @@ class ParkingSite(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(max_length=150)
     address = models.CharField(max_length=100)
-    lots_number = models.IntegerField(blank=True)
-    cameras_number = models.IntegerField(blank=True)
     is_free = models.BooleanField()
-    latitude = models.FloatField(validators=[MinValueValidator(-90, "Limit error"),
-                                             MaxValueValidator(90, "Limit error")])
-    longitude = models.FloatField(validators=[MinValueValidator(-180, "Limit error"),
-                                              MaxValueValidator(180, "Limit error")])
+    latitude = models.FloatField(validators=[
+        MinValueValidator(-90, "Limit error"),
+        MaxValueValidator(90, "Limit error"),
+    ])
+    longitude = models.FloatField(validators=[
+        MinValueValidator(-180, "Limit error"),
+        MaxValueValidator(180, "Limit error"),
+    ])
 
 
 class Citizen(models.Model):
@@ -32,7 +34,7 @@ class Citizen(models.Model):
 
 
 class Acab(models.Model):
-    head = models.ForeignKey(Citizen, on_delete=models.CASCADE)
+    head = models.ForeignKey(Citizen, on_delete=models.CASCADE, related_name='acabs')
     price_per_hour = models.FloatField(validators=[
         MinValueValidator(0, "Minimal price error"),
     ])
@@ -42,7 +44,7 @@ class Acab(models.Model):
 class VideoProcessor(models.Model):
     id = models.AutoField(primary_key=True)
     type = models.ForeignKey(VideoProcessorType, on_delete=models.CASCADE)
-    parking_site = models.ForeignKey(ParkingSite, on_delete=models.CASCADE)
+    parking_site = models.ForeignKey(ParkingSite, on_delete=models.CASCADE, related_name='processors')
     stream_url = models.CharField(max_length=100)
     is_active = models.BooleanField(default=False)
 
@@ -54,6 +56,6 @@ class ParkingLot(models.Model):
     coordinates = ArrayField(models.IntegerField())
     parking_site = models.ForeignKey(ParkingSite, on_delete=models.CASCADE, related_name='lots')
     video_processor = models.ForeignKey(VideoProcessor, on_delete=models.CASCADE, related_name='lots')
-    is_occupied = models.BooleanField()
+    is_occupied = models.BooleanField(default=False)
     is_for_disabled = models.BooleanField()
-    acab_id = models.ForeignKey(Acab, on_delete=models.CASCADE, blank=True, null=True)
+    acab_id = models.ForeignKey(Acab, on_delete=models.CASCADE, blank=True, null=True, related_name='lots')
