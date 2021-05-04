@@ -1,7 +1,4 @@
-from django.shortcuts import get_object_or_404
-
-from ..models import VideoProcessor
-from ..serializers import ParkingLotSerializer
+from ..models import ParkingLot
 
 
 def get_parking_map_by_processor_id(processor_id):
@@ -15,16 +12,12 @@ def get_parking_map_by_processor_id(processor_id):
     Returns:
         List of objects which contains ID of the Parking site and its coordinates.
     """
-    processor = get_object_or_404(VideoProcessor, pk=processor_id)
-    lots = processor.lots.all()
-
-    serializer = ParkingLotSerializer(lots, many=True)
+    lots = ParkingLot.objects.filter(video_processor_id=processor_id).only('id', 'coordinates')
     parking_lots_map = []
-    for lot in serializer.data:
+    for lot in lots:
         obj = {
-            'id': lot.get('id'),
-            'coordinates': lot.get('coordinates')
+            'id': lot.id,
+            'coordinates': lot.coordinates,
         }
         parking_lots_map.append(obj)
-
     return parking_lots_map
